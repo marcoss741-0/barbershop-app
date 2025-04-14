@@ -70,7 +70,7 @@ const Home = async () => {
                 src="/sobrancelha.svg"
                 width={16}
                 height={16}
-                alt="acabamento"
+                alt="Sobrancelhas"
               />
               Sobrancelhas
             </Button>
