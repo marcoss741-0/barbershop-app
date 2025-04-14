@@ -17,7 +17,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
           <div className="relative h-[160px] w-full">
             <Image
               fill
-              sizes=""
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover"
               src={barbershop.imageUrl}
               alt={barbershop.name}
