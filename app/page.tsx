@@ -45,17 +45,17 @@ const Home = async () => {
           </div>
 
           <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-            <Button className="gap-2" variant="secondary">
+            <Button className="cursor-pointer gap-2" variant="secondary">
               <Image src="/corte.svg" width={16} height={16} alt="corte" />
               Cabelo
             </Button>
 
-            <Button className="gap-2" variant="secondary">
+            <Button className="cursor-pointer gap-2" variant="secondary">
               <Image src="/barba.svg" width={16} height={16} alt="barba" />
               Cabelo
             </Button>
 
-            <Button className="gap-2" variant="secondary">
+            <Button className="cursor-pointer gap-2" variant="secondary">
               <Image
                 src="/acabamento.svg"
                 width={16}
@@ -65,7 +65,17 @@ const Home = async () => {
               Cabelo
             </Button>
 
-            <Button className="gap-2" variant="secondary">
+            <Button className="cursor-pointer gap-2" variant="secondary">
+              <Image
+                src="/massagem.svg"
+                width={16}
+                height={16}
+                alt="Massagem"
+              />
+              Massagem
+            </Button>
+
+            <Button className="cursor-pointer gap-2" variant="secondary">
               <Image
                 src="/sobrancelha.svg"
                 width={16}
@@ -75,7 +85,17 @@ const Home = async () => {
               Sobrancelhas
             </Button>
 
-            <Button className="gap-2" variant="secondary">
+            <Button className="cursor-pointer gap-2" variant="secondary">
+              <Image
+                src="/hidratacao.svg"
+                width={16}
+                height={16}
+                alt="Hidratação"
+              />
+              Hidratação
+            </Button>
+
+            <Button className="cursor-pointer gap-2" variant="secondary">
               <FootprintsIcon size={16} />
               Pezinho
             </Button>
