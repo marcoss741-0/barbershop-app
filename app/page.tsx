@@ -1,7 +1,12 @@
 import Header from "@/app/_components/header";
 import { Input } from "./_components/ui/input";
 import { Button } from "./_components/ui/button";
-import { SearchIcon } from "lucide-react";
+import {
+  EyeIcon,
+  FootprintsIcon,
+  ScissorsIcon,
+  SearchIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent } from "./_components/ui/card";
 import { Badge } from "./_components/ui/badge";
@@ -36,6 +41,43 @@ const Home = async () => {
               className="cursor-pointer rounded-md bg-[#8162FF] text-white"
             >
               <SearchIcon />
+            </Button>
+          </div>
+
+          <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+            <Button className="gap-2" variant="secondary">
+              <Image src="/corte.svg" width={16} height={16} alt="corte" />
+              Cabelo
+            </Button>
+
+            <Button className="gap-2" variant="secondary">
+              <Image src="/barba.svg" width={16} height={16} alt="barba" />
+              Cabelo
+            </Button>
+
+            <Button className="gap-2" variant="secondary">
+              <Image
+                src="/acabamento.svg"
+                width={16}
+                height={16}
+                alt="acabamento"
+              />
+              Cabelo
+            </Button>
+
+            <Button className="gap-2" variant="secondary">
+              <Image
+                src="/sobrancelha.svg"
+                width={16}
+                height={16}
+                alt="acabamento"
+              />
+              Sobrancelhas
+            </Button>
+
+            <Button className="gap-2" variant="secondary">
+              <FootprintsIcon size={16} />
+              Pezinho
             </Button>
           </div>
 
@@ -86,7 +128,7 @@ const Home = async () => {
               RECOMENDADOS
             </h3>
 
-            <div className="flex gap-4 overflow-x-auto [&::-webikit-scrollbar]:hidden">
+            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
               {babershops.map((babershop) => (
                 <BarbershopItem key={babershop.id} barbershop={babershop} />
               ))}
@@ -98,7 +140,7 @@ const Home = async () => {
               POPULARES
             </h3>
 
-            <div className="flex gap-4 overflow-x-auto [&::-webikit-scrollbar]:hidden">
+            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
               {popularBarbershop.map((pop) => (
                 <BarbershopItem key={pop.id} barbershop={pop} />
               ))}
@@ -108,7 +150,11 @@ const Home = async () => {
         <footer>
           <Card>
             <CardContent>
-              <p> &copy; 2025 Copyright. Ômega Barbers.</p>
+              <p>
+                {" "}
+                &copy; 2025 Copyright.{" "}
+                <span className="font-bold">Ômega Barbers.</span>
+              </p>
             </CardContent>
           </Card>
         </footer>

@@ -39,7 +39,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
             <p className="truncate text-sm text-gray-400">
               {barbershop.address}
             </p>
-            <Button variant="secondary" className="mt-3 w-full">
+            <Button variant="secondary" className="mt-3 w-full cursor-pointer">
               RESERVAR
             </Button>
           </div>
