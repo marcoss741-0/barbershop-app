@@ -6,8 +6,12 @@ import Image from "next/image";
 import { Card, CardContent } from "./_components/ui/card";
 import { Badge } from "./_components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "./_components/ui/avatar";
+import db from "./_lib/prisma";
+import BarbershopItem from "./_components/barbershop-item";
 
-const Home = () => {
+const Home = async () => {
+  const babershops = await db.barbershop.findMany({});
+
   return (
     <>
       <div>
@@ -42,9 +46,9 @@ const Home = () => {
             <h3 className="text-[16px] font-semibold text-[#838896]">
               AGENDAMENTOS
             </h3>
-            <Card>
+            <Card className="w-full space-y-3 rounded-md p-0">
               <CardContent className="flex justify-between">
-                <div className="flex flex-col justify-start gap-2">
+                <div className="flex flex-col justify-start gap-2 p-4">
                   <Badge className="bg-[#221C3D] text-[#8162FF]">
                     Confirmado
                   </Badge>
@@ -62,7 +66,7 @@ const Home = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-center border-l-2 border-solid px-5">
+                <div className="flex min-h-full flex-col items-center justify-center border-l-2 border-solid p-4">
                   <p className="text-sm font-normal">Abril</p>
                   <h3 className="text-2xl font-bold">10</h3>
                   <p className="text-sm font-normal">10:30</p>
@@ -75,6 +79,12 @@ const Home = () => {
             <h3 className="text-[16px] font-semibold text-[#838896]">
               RECOMENDADOS
             </h3>
+
+            <div className="flex gap-4 overflow-x-auto [&::-webikit-scrollbar]:hidden">
+              {babershops.map((babershop) => (
+                <BarbershopItem key={babershop.id} barbershop={babershop} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
