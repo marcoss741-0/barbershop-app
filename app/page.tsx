@@ -11,6 +11,12 @@ import BarbershopItem from "./_components/barbershop-item";
 
 const Home = async () => {
   const babershops = await db.barbershop.findMany({});
+  const popularBarbershop = await db.barbershop.findMany({
+    take: 5,
+    orderBy: {
+      name: "desc",
+    },
+  });
 
   return (
     <>
@@ -86,7 +92,26 @@ const Home = async () => {
               ))}
             </div>
           </div>
+
+          <div className="mt-4 w-full items-center gap-2 space-y-4">
+            <h3 className="text-[16px] font-semibold text-[#838896]">
+              POPULARES
+            </h3>
+
+            <div className="flex gap-4 overflow-x-auto [&::-webikit-scrollbar]:hidden">
+              {popularBarbershop.map((pop) => (
+                <BarbershopItem key={pop.id} barbershop={pop} />
+              ))}
+            </div>
+          </div>
         </div>
+        <footer>
+          <Card>
+            <CardContent>
+              <p> &copy; 2025 Copyright. Ômega Barbers.</p>
+            </CardContent>
+          </Card>
+        </footer>
       </div>
     </>
   );
