@@ -86,6 +86,7 @@ const Home = async () => {
             </div>
           </div>
         </div>
+
         <footer>
           <Card>
             <CardContent>
