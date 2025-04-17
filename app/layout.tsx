@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
 import { Toaster } from "./_components/ui/sonner";
+import Footer from "./_components/footer";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -20,6 +21,8 @@ export default function RootLayout({
       <body className={`${montserrat.className}`}>
         {children}
         <Toaster duration={2000} position="bottom-left" style={{}} />
+
+        <Footer />
       </body>
     </html>
   );

@@ -1,15 +1,8 @@
-import Footer from "@/app/_components/footer";
 import PhoneItem from "@/app/_components/phone-item";
 import ServiceItem from "@/app/_components/service-item";
 import { Button } from "@/app/_components/ui/button";
 import db from "@/app/_lib/prisma";
-import {
-  ChevronLeftIcon,
-  MapPin,
-  MapPinIcon,
-  MenuIcon,
-  StarIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -97,8 +90,6 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
             <PhoneItem phone={phone} />
           ))}
         </div>
-
-        <Footer />
       </div>
     </>
   );
