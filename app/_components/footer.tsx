@@ -9,7 +9,7 @@ const Footer = () => {
             <p>
               {" "}
               &copy; 2025 Copyright.{" "}
-              <span className="font-bold">Ômega Barbers.</span>
+              <span className="font-semibold">Ômega Barbers.</span>
             </p>
           </CardContent>
         </Card>

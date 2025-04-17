@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
+import { Toaster } from "./_components/ui/sonner";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning className="dark">
-      <body className={`${montserrat.className}`}> {children}</body>
+      <body className={`${montserrat.className}`}>
+        {children}
+        <Toaster duration={2000} position="bottom-left" style={{}} />
+      </body>
     </html>
   );
 }
