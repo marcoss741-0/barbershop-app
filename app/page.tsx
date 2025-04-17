@@ -15,6 +15,7 @@ import db from "./_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { ShortSearchOptions } from "./_constants/short-search";
 import BookingItem from "./_components/booking-item";
+import Footer from "./_components/footer";
 
 const Home = async () => {
   const babershops = await db.barbershop.findMany({});
@@ -87,17 +88,7 @@ const Home = async () => {
           </div>
         </div>
 
-        <footer>
-          <Card>
-            <CardContent>
-              <p>
-                {" "}
-                &copy; 2025 Copyright.{" "}
-                <span className="font-bold">Ômega Barbers.</span>
-              </p>
-            </CardContent>
-          </Card>
-        </footer>
+        <Footer />
       </div>
     </>
   );
