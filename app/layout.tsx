@@ -3,6 +3,7 @@ import "./globals.css";
 import { Montserrat } from "next/font/google";
 import { Toaster } from "./_components/ui/sonner";
 import Footer from "./_components/footer";
+import AuthProvider from "./_providers/auth";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -19,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning className="dark">
       <body className={`${montserrat.className}`}>
-        {children}
-        <Toaster duration={2000} position="bottom-left" style={{}} />
+        <AuthProvider>
+          {children}
+          <Toaster duration={2000} position="bottom-left" style={{}} />
 
-        <Footer />
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
