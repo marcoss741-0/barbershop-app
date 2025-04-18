@@ -16,6 +16,7 @@ import {
 } from "./ui/sheet";
 import Image from "next/image";
 import { ShortSearchOptions } from "../_constants/short-search";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Header = () => {
   return (
@@ -43,6 +44,22 @@ const Header = () => {
                 <SheetHeader>
                   <SheetTitle className="text-left">Menu</SheetTitle>
                 </SheetHeader>
+                <div className="flex items-center gap-3 border-b border-solid py-5">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage
+                      src="https://github.com/marcoss741-0.png"
+                      className="h-10 w-10"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <p className="text-[16px] font-bold">Marcos Martins</p>
+                    <p className="text-xs font-normal">
+                      marcossan741@icloud.com
+                    </p>
+                  </div>
+                </div>
+
                 <div className="flex flex-col gap-2 border-b border-solid py-5">
                   <Button size="sm" className="justify-start gap-2">
                     <HomeIcon />
@@ -68,8 +85,8 @@ const Header = () => {
                       <Image
                         src={option.iconUrl}
                         alt={option.title}
-                        width={16}
-                        height={16}
+                        width={18}
+                        height={18}
                       />
                       {option.title}
                     </Button>
