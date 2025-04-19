@@ -111,17 +111,22 @@ const SidebarSheet = () => {
             </SheetClose>
           ))}
         </div>
-        <div className="flex w-full items-center justify-start gap-2 py-5">
-          <Button
-            size="default"
-            variant="destructive"
-            className="w-full justify-start gap-3 p-3"
-            onClick={handleLogoutWithGoogle}
-          >
-            <LogOutIcon />
-            <p className="text-sm">Sair da Conta</p>
-          </Button>
-        </div>
+
+        {user && (
+          <>
+            <div className="flex w-full items-center justify-start gap-2 py-5">
+              <Button
+                size="default"
+                variant="ghost"
+                className="w-full justify-start gap-2 p-3"
+                onClick={handleLogoutWithGoogle}
+              >
+                <LogOutIcon />
+                <p className="text-sm">Sair da Conta</p>
+              </Button>
+            </div>
+          </>
+        )}
       </SheetContent>
     </>
   );
