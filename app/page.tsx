@@ -1,15 +1,17 @@
 import Header from "@/app/_components/header";
-import { Input } from "./_components/ui/input";
 import { Button } from "./_components/ui/button";
-import { SearchIcon } from "lucide-react";
 import Image from "next/image";
 import db from "./_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { ShortSearchOptions } from "./_constants/short-search";
 import BookingItem from "./_components/booking-item";
 import SearchInput from "./_components/search";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./_lib/auth-option";
+import { Booking, Prisma } from "@prisma/client";
 
 const Home = async () => {
+  const session = await getServerSession(authOptions);
   const babershops = await db.barbershop.findMany({});
   const popularBarbershop = await db.barbershop.findMany({
     take: 5,
@@ -17,6 +19,27 @@ const Home = async () => {
       name: "desc",
     },
   });
+
+  const bookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session?.user as { id: string })?.id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "desc",
+        },
+      })
+    : [];
 
   return (
     <>
@@ -47,7 +70,32 @@ const Home = async () => {
             ))}
           </div>
 
-          <BookingItem />
+          <div className="relative mt-6 flex h-36 w-full items-center rounded-md">
+            <Image
+              fill
+              priority
+              src="/banner.png"
+              alt="Corte como os melhores da cidade!"
+              className="rounded-md object-cover"
+            />
+          </div>
+
+          <div className="mt-4 w-full items-center gap-2 space-y-4">
+            <h3 className="text-[16px] font-semibold text-[#838896]">
+              AGENDAMENTOS
+            </h3>
+            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+              {bookings.map(
+                (
+                  booking: Prisma.BookingGetPayload<{
+                    include: { service: { include: { barbershop: true } } };
+                  }>,
+                ) => (
+                  <BookingItem key={booking.id} booking={booking} />
+                ),
+              )}
+            </div>
+          </div>
 
           <div className="mt-4 w-full items-center gap-2 space-y-4">
             <h3 className="text-[16px] font-semibold text-[#838896]">
