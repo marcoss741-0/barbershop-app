@@ -7,7 +7,6 @@ import { authOptions } from "../_lib/auth-option";
 
 interface CreatingBookingParams {
   serviceId: string;
-  userId: string;
   date: Date;
 }
 
@@ -20,6 +19,7 @@ const creatingBooking = async (params: CreatingBookingParams) => {
   await db.booking.create({
     data: {
       ...params,
+      userId: (user.user as { id: string }).id,
     },
   });
 };
