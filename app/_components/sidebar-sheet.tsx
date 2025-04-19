@@ -44,7 +44,7 @@ const SidebarSheet = () => {
             <>
               <Avatar className="h-10 w-10">
                 <AvatarImage src={user?.image ?? ""} className="h-10 w-10" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>{user.name}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <p className="text-[16px] font-bold">{user?.name}</p>
@@ -108,19 +108,27 @@ const SidebarSheet = () => {
 
         <div className="flex flex-col gap-2 border-b border-solid py-5">
           {ShortSearchOptions.map((option) => (
-            <Button
-              size="sm"
-              variant="ghost"
-              className="justify-start gap-3 p-3"
-            >
-              <Image
-                src={option.iconUrl}
-                alt={option.title}
-                width={18}
-                height={18}
-              />
-              {option.title}
-            </Button>
+            <SheetClose asChild>
+              <Link
+                href={`/barbershops?service=${option.title}`}
+                key={option.title}
+                className="w-full"
+              >
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="w-full justify-start gap-3 p-3"
+                >
+                  <Image
+                    src={option.iconUrl}
+                    alt={option.title}
+                    width={18}
+                    height={18}
+                  />
+                  {option.title}
+                </Button>
+              </Link>
+            </SheetClose>
           ))}
         </div>
         <div className="flex w-full items-center justify-start gap-2 py-5">

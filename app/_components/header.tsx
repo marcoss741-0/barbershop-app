@@ -3,6 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Sheet, SheetTrigger } from "./ui/sheet";
 import SidebarSheet from "./sidebar-sheet";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -10,10 +11,12 @@ const Header = () => {
       <Card>
         <CardContent className="flex items-center justify-between gap-2">
           <div className="flex items-center justify-start gap-2">
-            <ScissorsIcon className="h-8 w-8 font-bold text-purple-900" />
-            <h1 className="text-2xl font-normal text-gray-100">
-              ÔMEGA BARBER´S
-            </h1>
+            <Link href="/" className="flex gap-2">
+              <ScissorsIcon className="h-8 w-8 font-bold text-purple-900" />
+              <h1 className="text-2xl font-normal text-gray-100">
+                ÔMEGA BARBER´S
+              </h1>
+            </Link>
           </div>
           <div>
             <Sheet>

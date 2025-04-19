@@ -21,11 +21,12 @@ export default function RootLayout({
     <html lang="pt-br" suppressHydrationWarning className="dark">
       <body className={`${montserrat.className}`}>
         <AuthProvider>
-          {children}
-          <Toaster duration={2000} position="bottom-left" style={{}} />
-
-          <Footer />
+          <div className="flex h-full flex-col">
+            <div className="flex-1"> {children}</div>
+            <Footer />
+          </div>
         </AuthProvider>
+        <Toaster duration={2000} position="bottom-left" style={{}} />
       </body>
     </html>
   );

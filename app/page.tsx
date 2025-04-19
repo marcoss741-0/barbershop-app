@@ -7,6 +7,7 @@ import db from "./_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { ShortSearchOptions } from "./_constants/short-search";
 import BookingItem from "./_components/booking-item";
+import SearchInput from "./_components/search";
 
 const Home = async () => {
   const babershops = await db.barbershop.findMany({});
@@ -28,14 +29,8 @@ const Home = async () => {
           </h2>
           <p className="text-[14px] font-normal">Quinta, 10 de Abril</p>
 
-          <div className="mt-6 flex items-center gap-2">
-            <Input type="text" placeholder="Buscar..." className="w-full" />
-            <Button
-              variant="default"
-              className="cursor-pointer rounded-md bg-[#8162FF] text-white"
-            >
-              <SearchIcon />
-            </Button>
+          <div className="mt-6">
+            <SearchInput />
           </div>
 
           <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
