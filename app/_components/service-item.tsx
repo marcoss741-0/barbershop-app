@@ -11,7 +11,6 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "./ui/sheet";
 import { Calendar } from "./ui/calendar";
 import { ptBR } from "date-fns/locale";
@@ -125,7 +124,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
       await creatingBooking({
         date: newDate,
         serviceId: service.id,
-        userId: (data?.user as any).id,
+        // userId: (data?.user as any).id,
       });
 
       toast.success("Agendamento realizado!!");
