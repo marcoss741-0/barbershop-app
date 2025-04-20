@@ -20,7 +20,7 @@ import { Pick } from "@prisma/client/runtime/library";
 import { toast } from "sonner";
 import creatingBooking from "../_actions/creating-booking";
 import { useSession } from "next-auth/react";
-import { getBookings } from "../_actions/get-bookings";
+import { cachedGetBookings } from "../_actions/get-bookings";
 import { Dialog, DialogContent } from "./ui/dialog";
 import SigninDialog from "./signin-dialog";
 
@@ -90,7 +90,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
   useEffect(() => {
     const fetchBookings = async () => {
       if (!selectedDay) return;
-      await getBookings({
+      await cachedGetBookings({
         date: selectedDay,
         serviceId: service.id,
       }).then((res) => {
@@ -129,7 +129,6 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
       await creatingBooking({
         date: newDate,
         serviceId: service.id,
-        // userId: (data?.user as any).id,
       });
 
       toast.success("Agendamento realizado!!");
@@ -160,6 +159,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
   return (
     <>
+      {/* Card do serviço */}
       <Card className="w-full py-1">
         <CardContent className="flex w-full items-center justify-between gap-3 px-2">
           <div className="relative max-h-28 min-h-28 min-w-28 max-w-28">

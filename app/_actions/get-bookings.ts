@@ -2,6 +2,7 @@
 
 import { endOfDay, startOfDay } from "date-fns";
 import db from "../_lib/prisma";
+import { unstable_cache } from "next/cache";
 
 interface GetBookingsProps {
   serviceId?: string;
@@ -18,3 +19,8 @@ export const getBookings = ({ date }: GetBookingsProps) => {
     },
   });
 };
+
+export const cachedGetBookings = unstable_cache(getBookings, ["getBookings"], {
+  tags: ["getBookings"],
+  revalidate: 60,
+});

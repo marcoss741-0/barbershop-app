@@ -85,14 +85,20 @@ const Home = async () => {
               AGENDAMENTOS
             </h3>
             <div className="flex min-w-full gap-2 overflow-x-auto p-5 [&::-webkit-scrollbar]:hidden">
-              {bookings.map(
-                (
-                  booking: Prisma.BookingGetPayload<{
-                    include: { service: { include: { barbershop: true } } };
-                  }>,
-                ) => (
-                  <BookingItem key={booking.id} booking={booking} />
-                ),
+              {bookings.length > 0 ? (
+                bookings.map(
+                  (
+                    booking: Prisma.BookingGetPayload<{
+                      include: { service: { include: { barbershop: true } } };
+                    }>,
+                  ) => <BookingItem key={booking.id} booking={booking} />,
+                )
+              ) : (
+                <div className="flex w-full items-center justify-center">
+                  <p className="text-sm text-gray-400">
+                    Você não tem agendamentos
+                  </p>
+                </div>
               )}
             </div>
           </div>

@@ -62,6 +62,10 @@ const BookingItem = ({ booking }: BookingItemProps) => {
     setSheetOpen(isOpen);
   };
 
+  const {
+    service: { barbershop },
+  } = booking;
+
   return (
     <>
       <Sheet open={sheetOpen} onOpenChange={handleSheetOpenChange}>
@@ -89,17 +93,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 <CardContent className="flex items-center gap-3 px-5 py-3">
                   <Avatar>
                     <AvatarImage
-                      src={booking.service.barbershop.imageUrl}
-                      alt={`Perfil da barbearia ${booking.service.barbershop.name}`}
+                      src={barbershop.imageUrl}
+                      alt={`Perfil da barbearia ${barbershop.name}`}
                     />
                   </Avatar>
                   <div className="flex flex-col justify-start gap-1">
-                    <h3 className="font-bold">
-                      {booking.service.barbershop.name}
-                    </h3>
-                    <p className="text-xs">
-                      {booking.service.barbershop.address}
-                    </p>
+                    <h3 className="font-bold">{barbershop.name}</h3>
+                    <p className="text-xs">{barbershop.address}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -136,14 +136,14 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm text-gray-400">Barbearia</h2>
-                  <p className="text-sm">{booking.service.barbershop.name}</p>
+                  <p className="text-sm">{barbershop.name}</p>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex flex-col gap-3 p-5">
               <h2 className="text-sm font-normal text-gray-400">CONTATO</h2>
-              {booking.service.barbershop.phones.map((phone, index) => (
+              {barbershop.phones.map((phone, index) => (
                 <PhoneItem key={index} phone={phone} />
               ))}
             </div>
