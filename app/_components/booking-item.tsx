@@ -69,7 +69,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
   return (
     <>
       <Sheet open={sheetOpen} onOpenChange={handleSheetOpenChange}>
-        <SheetTrigger asChild>
+        <SheetTrigger className="min-w-[90%]" asChild>
           <div className="cursor-pointer">
             <BookingSummary booking={booking} />
           </div>
