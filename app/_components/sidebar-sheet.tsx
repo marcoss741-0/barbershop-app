@@ -88,10 +88,9 @@ const SidebarSheet = () => {
 
         <div className="flex flex-col gap-2 border-b border-solid py-5">
           {ShortSearchOptions.map((option) => (
-            <SheetClose asChild>
+            <SheetClose key={option.title} asChild>
               <Link
                 href={`/barbershops?service=${option.title}`}
-                key={option.title}
                 className="w-full"
               >
                 <Button

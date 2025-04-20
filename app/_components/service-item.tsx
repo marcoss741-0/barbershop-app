@@ -196,7 +196,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
         open={bookingSheetIsopen}
         onOpenChange={handleBookingSheetIsopenChange}
       >
-        <SheetContent className="p-0">
+        <SheetContent className="h-[100vh] overflow-y-auto p-0 [&::-webkit-scrollbar]:hidden">
           <SheetHeader className="border-b border-solid py-3">
             <SheetTitle className="text-center">Fazer reserva</SheetTitle>
           </SheetHeader>

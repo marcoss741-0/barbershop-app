@@ -38,6 +38,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
             fill
             className="object-cover"
             alt={barbershop!.name}
+            priority
           />
           <Button
             size={"icon"}
