@@ -1,11 +1,14 @@
+"use client";
+
 import { Prisma } from "@prisma/client";
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
-import { format, isFuture } from "date-fns";
+import { format, isFuture, set } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -15,6 +18,20 @@ import {
 import PhoneItem from "./phone-item";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import BookingSummary from "./booking-summary";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./ui/drawer";
+import { toast } from "sonner";
+import { deleteBooking } from "../_actions/delete-booking";
+import { useState } from "react";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -24,54 +41,43 @@ interface BookingItemProps {
 
 const BookingItem = ({ booking }: BookingItemProps) => {
   const isConfirmed = isFuture(booking.date);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const handleDeleteBooking = async () => {
+    try {
+      deleteBooking(booking.id);
+      toast.success("Reserva cancelada com sucesso!");
+
+      setTimeout(() => {
+        setDrawerOpen(false);
+        setSheetOpen(false);
+      }, 1500);
+    } catch (error) {
+      toast.error("Error deleting booking: " + error);
+    }
+  };
+
+  const handleSheetOpenChange = (isOpen: boolean) => {
+    setSheetOpen(isOpen);
+  };
 
   return (
     <>
-      <Sheet>
+      <Sheet open={sheetOpen} onOpenChange={handleSheetOpenChange}>
         <SheetTrigger asChild>
-          <Card className="min-w-[90%] space-y-3 rounded-md p-0">
-            <CardContent className="flex justify-between">
-              <div className="flex flex-col justify-start gap-2 p-4">
-                <Badge variant={isConfirmed ? "default" : "secondary"}>
-                  {isConfirmed ? "Confirmado" : "Finalizado"}
-                </Badge>
-                <h3 className="text-[16px] font-bold">
-                  {booking.service.name}
-                </h3>
-
-                <div className="flex items-center justify-start gap-2">
-                  <Avatar>
-                    <AvatarImage src={booking.service.imageUrl} alt="Avatar" />
-                    <AvatarFallback>
-                      {booking.service.barbershop.name}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p>{booking.service.barbershop.name}</p>
-                </div>
-              </div>
-
-              <div className="flex min-h-full flex-col items-center justify-center border-l-2 border-solid p-4">
-                <p className="text-sm font-normal capitalize">
-                  {format(booking.date, "MMMM", { locale: ptBR })}
-                </p>
-                <h3 className="text-2xl font-bold">
-                  {format(booking.date, "dd")}
-                </h3>
-                <p className="text-sm font-normal">
-                  {format(booking.date, "HH:mm")}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="cursor-pointer">
+            <BookingSummary booking={booking} />
+          </div>
         </SheetTrigger>
-        <SheetContent className="flex w-[90%] flex-col p-0">
+        <SheetContent className="flex w-[90%] max-w-md flex-col p-4">
           <SheetHeader className="border-b border-solid py-3">
             <SheetTitle className="p-2 text-left">
               Informações da reserva
             </SheetTitle>
           </SheetHeader>
 
-          <div className="flex-1 space-y-3 p-5">
+          <div className="flex-1 space-y-5 p-3">
             <div className="relative flex h-[160px] w-full items-end">
               <Image
                 src="/map.png"
@@ -137,20 +143,48 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
             <div className="flex flex-col gap-3 p-5">
               <h2 className="text-sm font-normal text-gray-400">CONTATO</h2>
-              {booking.service.barbershop.phones.map((phone) => (
-                <PhoneItem phone={phone} />
+              {booking.service.barbershop.phones.map((phone, index) => (
+                <PhoneItem key={index} phone={phone} />
               ))}
             </div>
           </div>
           <SheetFooter className="mt-auto p-5">
             <div className="flex w-full justify-between gap-2">
-              <Button variant="outline" className="w-full">
-                Voltar
-              </Button>
-
-              <Button variant="destructive" className="w-full">
-                Cancelar reserva
-              </Button>
+              <SheetClose asChild>
+                <Button variant="outline" className="w-full">
+                  Voltar
+                </Button>
+              </SheetClose>
+              {isConfirmed && (
+                <>
+                  <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                    <DrawerTrigger asChild>
+                      <Button variant="destructive" className="w-full">
+                        Cancelar reserva
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent>
+                      <DrawerHeader>
+                        <DrawerTitle>Você tem certeza absoluta?</DrawerTitle>
+                        <DrawerDescription>
+                          Esta ação não pode ser desfeita.
+                        </DrawerDescription>
+                      </DrawerHeader>
+                      <DrawerFooter>
+                        <Button
+                          variant="destructive"
+                          onClick={handleDeleteBooking}
+                        >
+                          Continuar
+                        </Button>
+                        <DrawerClose asChild>
+                          <Button variant="outline">Voltar</Button>
+                        </DrawerClose>
+                      </DrawerFooter>
+                    </DrawerContent>
+                  </Drawer>
+                </>
+              )}
             </div>
           </SheetFooter>
         </SheetContent>

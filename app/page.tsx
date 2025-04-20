@@ -8,7 +8,7 @@ import BookingItem from "./_components/booking-item";
 import SearchInput from "./_components/search";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./_lib/auth-option";
-import { Booking, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -84,7 +84,7 @@ const Home = async () => {
             <h3 className="text-[16px] font-semibold text-[#838896]">
               AGENDAMENTOS
             </h3>
-            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            <div className="flex min-w-full gap-2 overflow-x-auto p-5 [&::-webkit-scrollbar]:hidden">
               {bookings.map(
                 (
                   booking: Prisma.BookingGetPayload<{

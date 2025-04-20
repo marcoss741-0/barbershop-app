@@ -11,15 +11,8 @@ import { Button } from "./ui/button";
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import SigninDialog from "./signin-dialog";
 
