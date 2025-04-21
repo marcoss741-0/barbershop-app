@@ -214,10 +214,13 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
         open={bookingSheetIsopen}
         onOpenChange={handleBookingSheetIsopenChange}
       >
-        <SheetContent className="h-[100vh] overflow-y-auto p-0 [&::-webkit-scrollbar]:hidden">
+        <SheetContent className="max-h-screen overflow-y-auto p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
           <SheetHeader className="border-b border-solid py-3">
-            <SheetTitle className="text-center">Fazer reserva</SheetTitle>
+            <SheetTitle className="text-center text-lg font-semibold">
+              Fazer reserva
+            </SheetTitle>
           </SheetHeader>
+
           <div className="border-b border-solid py-5">
             <Calendar
               mode="single"
@@ -252,42 +255,43 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
           </div>
 
           {selectedDay && (
-            <>
-              <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
-                {getTimeList(dayBookings).length > 0 ? (
-                  getTimeList(dayBookings).map((hour, index) => (
-                    <Button
-                      key={index}
-                      className="rounded-full"
-                      variant={selectedTime === hour ? "default" : "outline"}
-                      onClick={() => handleTimeSelect(hour)}
-                    >
-                      {hour}
-                    </Button>
-                  ))
-                ) : (
-                  <p className="text-center text-sm text-gray-400">
-                    Nenhum horário disponível para o dia selecionado.
-                  </p>
-                )}
-              </div>
-            </>
+            <div className="flex flex-wrap gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
+              {getTimeList(dayBookings).length > 0 ? (
+                getTimeList(dayBookings).map((hour, index) => (
+                  <Button
+                    key={index}
+                    className="rounded-full"
+                    variant={selectedTime === hour ? "default" : "outline"}
+                    onClick={() => handleTimeSelect(hour)}
+                    aria-label={`Selecionar horário ${hour}`}
+                  >
+                    {hour}
+                  </Button>
+                ))
+              ) : (
+                <p className="text-center text-sm text-gray-400">
+                  Nenhum horário disponível para o dia selecionado.
+                </p>
+              )}
+            </div>
           )}
 
           {selectedDate && (
-            <>
-              <div className="p-5">
-                <BookingResume
-                  barbershop={barbershop}
-                  service={service}
-                  selectedDate={selectedDate}
-                />
-              </div>
-            </>
+            <div className="p-5">
+              <BookingResume
+                barbershop={barbershop}
+                service={service}
+                selectedDate={selectedDate}
+              />
+            </div>
           )}
 
           <SheetFooter className="mb-5 px-5">
-            <Button onClick={handleCreatingBooking} disabled={!selectedDate}>
+            <Button
+              onClick={handleCreatingBooking}
+              disabled={!selectedDate}
+              className="w-full sm:w-auto"
+            >
               Confirmar
             </Button>
           </SheetFooter>
