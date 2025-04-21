@@ -255,7 +255,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
           </div>
 
           {selectedDay && (
-            <div className="flex flex-wrap gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
+            <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
               {getTimeList(dayBookings).length > 0 ? (
                 getTimeList(dayBookings).map((hour, index) => (
                   <Button
