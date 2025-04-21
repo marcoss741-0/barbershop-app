@@ -14,7 +14,7 @@ interface BookingItemProps {
 const BookingSummary = ({ booking }: BookingItemProps) => {
   const isConfirmed = isFuture(booking.date);
   return (
-    <Card className="max-h-36 min-h-36 min-w-full flex-nowrap rounded-md p-0">
+    <Card className="min-w-full rounded-md p-0">
       <CardContent className="flex w-full items-center justify-between gap-3 p-0">
         <div className="flex flex-col justify-start gap-2 p-4">
           <Badge
@@ -42,7 +42,7 @@ const BookingSummary = ({ booking }: BookingItemProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center border-l-2 border-solid p-4">
+        <div className="flex flex-col items-center justify-start border-l-2 border-solid p-4">
           <p className="text-sm font-normal capitalize">
             {format(booking.date, "MMMM", { locale: ptBR })}
           </p>

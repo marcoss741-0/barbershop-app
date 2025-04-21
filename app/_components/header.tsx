@@ -13,7 +13,7 @@ const Header = () => {
           <div className="flex items-center justify-start gap-2">
             <Link href="/" className="flex gap-2">
               <ScissorsIcon className="h-8 w-8 font-bold text-purple-900" />
-              <h1 className="text-2xl font-normal text-gray-100">
+              <h1 className="text-[20px] font-semibold text-gray-100">
                 ÔMEGA BARBER´S
               </h1>
             </Link>

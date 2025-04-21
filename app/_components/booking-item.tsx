@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
-import { format, isFuture, set } from "date-fns";
+import { format, isFuture } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   Sheet,
@@ -69,19 +69,19 @@ const BookingItem = ({ booking }: BookingItemProps) => {
   return (
     <>
       <Sheet open={sheetOpen} onOpenChange={handleSheetOpenChange}>
-        <SheetTrigger className="min-w-[90%]" asChild>
+        <SheetTrigger asChild>
           <div className="cursor-pointer">
-            <BookingSummary booking={booking} />
+            <BookingSummary booking={JSON.parse(JSON.stringify(booking))} />
           </div>
         </SheetTrigger>
-        <SheetContent className="flex h-[100vh] w-[90%] max-w-md flex-col overflow-y-auto p-4 [&::-webkit-scrollbar]:hidden">
+        <SheetContent className="mx-auto flex h-[99.9vh] w-[90%] max-w-md flex-col overflow-y-auto rounded-t-lg p-4 [&::-webkit-scrollbar]:hidden">
           <SheetHeader className="border-b border-solid py-3">
-            <SheetTitle className="p-2 text-left">
+            <SheetTitle className="text-center text-lg font-semibold">
               Informações da reserva
             </SheetTitle>
           </SheetHeader>
 
-          <div className="flex-1 space-y-5 p-3">
+          <div className="space-y-5 p-3">
             <div className="relative flex h-[160px] w-full items-end">
               <Image
                 src="/map.png"
@@ -111,12 +111,16 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             <Card>
               <CardContent className="space-y-3 p-3">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-bold">{booking.service.name}</h2>
+                  <h2 className="font-bold">
+                    {JSON.parse(JSON.stringify(booking.service.name))}
+                  </h2>
                   <p className="text-sm font-bold">
                     {Intl.NumberFormat("pt-BR", {
                       style: "currency",
                       currency: "BRL",
-                    }).format(Number(booking.service.price))}
+                    }).format(
+                      Number(JSON.parse(JSON.stringify(booking.service.price))),
+                    )}
                   </p>
                 </div>
 
@@ -148,7 +152,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               ))}
             </div>
           </div>
-          <SheetFooter className="mt-auto p-5">
+          <SheetFooter className="p-5">
             <div className="flex w-full justify-between gap-2">
               <SheetClose asChild>
                 <Button variant="outline" className="w-full">
@@ -156,34 +160,32 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 </Button>
               </SheetClose>
               {isConfirmed && (
-                <>
-                  <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-                    <DrawerTrigger asChild>
-                      <Button variant="destructive" className="w-full">
-                        Cancelar reserva
+                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                  <DrawerTrigger asChild>
+                    <Button variant="destructive" className="w-full">
+                      Cancelar reserva
+                    </Button>
+                  </DrawerTrigger>
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>Você tem certeza absoluta?</DrawerTitle>
+                      <DrawerDescription>
+                        Esta ação não pode ser desfeita.
+                      </DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerFooter>
+                      <Button
+                        variant="destructive"
+                        onClick={handleDeleteBooking}
+                      >
+                        Continuar
                       </Button>
-                    </DrawerTrigger>
-                    <DrawerContent>
-                      <DrawerHeader>
-                        <DrawerTitle>Você tem certeza absoluta?</DrawerTitle>
-                        <DrawerDescription>
-                          Esta ação não pode ser desfeita.
-                        </DrawerDescription>
-                      </DrawerHeader>
-                      <DrawerFooter>
-                        <Button
-                          variant="destructive"
-                          onClick={handleDeleteBooking}
-                        >
-                          Continuar
-                        </Button>
-                        <DrawerClose asChild>
-                          <Button variant="outline">Voltar</Button>
-                        </DrawerClose>
-                      </DrawerFooter>
-                    </DrawerContent>
-                  </Drawer>
-                </>
+                      <DrawerClose asChild>
+                        <Button variant="outline">Voltar</Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
               )}
             </div>
           </SheetFooter>

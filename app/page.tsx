@@ -84,14 +84,19 @@ const Home = async () => {
             <h3 className="text-[16px] font-semibold text-[#838896]">
               AGENDAMENTOS
             </h3>
-            <div className="flex min-w-full gap-2 overflow-x-auto p-5 [&::-webkit-scrollbar]:hidden">
+            <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
               {bookings.length > 0 ? (
                 bookings.map(
                   (
                     booking: Prisma.BookingGetPayload<{
                       include: { service: { include: { barbershop: true } } };
                     }>,
-                  ) => <BookingItem key={booking.id} booking={booking} />,
+                  ) => (
+                    <BookingItem
+                      key={JSON.parse(JSON.stringify(booking.id))}
+                      booking={JSON.parse(JSON.stringify(booking))}
+                    />
+                  ),
                 )
               ) : (
                 <div className="flex w-full items-center justify-center">

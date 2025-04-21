@@ -92,13 +92,13 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
       if (!selectedDay) return;
       await cachedGetBookings({
         date: selectedDay,
-        serviceId: service.id,
+        serviceId: JSON.parse(JSON.stringify(service.id)),
       }).then((res) => {
         setDayBookings(res);
       });
     };
     fetchBookings();
-  }, [selectedDay, service.id]);
+  }, [selectedDay, JSON.parse(JSON.stringify(service.id))]);
 
   const handleBookingSheetIsopenChange = () => {
     setSelectedDay(undefined);
@@ -128,7 +128,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
       await creatingBooking({
         date: newDate,
-        serviceId: service.id,
+        serviceId: JSON.parse(JSON.stringify(service.id)),
       });
 
       toast.success("Agendamento realizado!!");
@@ -165,19 +165,25 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
           <div className="relative max-h-28 min-h-28 min-w-28 max-w-28">
             <Image
               className="rounded-lg object-cover"
-              alt={service.name}
-              src={service.imageUrl}
+              alt={JSON.parse(JSON.stringify(service.name))}
+              src={JSON.parse(JSON.stringify(service.imageUrl))}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               fill
             />
           </div>
           <div className="flex flex-col gap-1 p-2">
-            <h1 className="mb-2 text-sm font-semibold">{service.name}</h1>
-            <p className="text-xs text-gray-400">{service.description}</p>
+            <h1 className="mb-2 text-sm font-semibold">
+              {JSON.parse(JSON.stringify(service.name))}
+            </h1>
+            <p className="text-xs text-gray-400">
+              {JSON.parse(JSON.stringify(service.description))}
+            </p>
 
             <div className="flex items-center justify-between">
               <p className="font-semibold text-primary">
-                {formatCurrencyBRL(Number(service.price))}
+                {formatCurrencyBRL(
+                  Number(JSON.parse(JSON.stringify(service.price))),
+                )}
               </p>
               <Button
                 variant="secondary"
@@ -262,12 +268,16 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
                 <Card>
                   <CardContent className="space-y-3 p-3">
                     <div className="flex items-center justify-between">
-                      <h2 className="font-bold">{service.name}</h2>
+                      <h2 className="font-bold">
+                        {JSON.parse(JSON.stringify(service.name))}
+                      </h2>
                       <p className="text-sm font-bold">
                         {Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: "BRL",
-                        }).format(Number(service.price))}
+                        }).format(
+                          Number(JSON.parse(JSON.stringify(service.price))),
+                        )}
                       </p>
                     </div>
 
@@ -295,7 +305,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
             </>
           )}
 
-          <SheetFooter className="mt-5 px-5">
+          <SheetFooter className="mb-5 px-5">
             <Button
               onClick={handleCreatingBooking}
               disabled={!selectedDay || !selectedTime}
