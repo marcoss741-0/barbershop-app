@@ -8,7 +8,7 @@ import Link from "next/link";
 const Header = () => {
   return (
     <>
-      <Card>
+      <Card className="rounded-none">
         <CardContent className="flex items-center justify-between gap-2">
           <div className="flex items-center justify-start gap-2">
             <Link href="/" className="flex gap-2">

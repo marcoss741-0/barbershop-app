@@ -24,6 +24,7 @@ import { cachedGetBookings } from "../_actions/get-bookings";
 import { Dialog, DialogContent } from "./ui/dialog";
 import SigninDialog from "./signin-dialog";
 import BookingResume from "./booking-resume";
+import { useRouter } from "next/navigation";
 
 interface BarbershopServicesProps {
   service: BarbershopService;
@@ -64,6 +65,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false);
 
   const { data } = useSession();
+  const router = useRouter();
 
   const getTimeList = (bookings: Booking[]) => {
     const now = new Date(); // Data e hora atual
@@ -129,21 +131,25 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
   const handleCreatingBooking = async () => {
     try {
-      if (!selectedDay || !selectedTime) return;
-
-      const hour = Number(selectedTime?.split(":")[0]);
-      const minute = Number(selectedTime?.split(":")[1]);
-      const newDate = set(selectedDay, {
-        hours: hour,
-        minutes: minute,
-      });
+      if (!selectedDate) return;
 
       await creatingBooking({
-        date: newDate,
+        date: selectedDate,
         serviceId: jsonService.id,
       });
 
-      toast.success("Agendamento realizado!!");
+      toast("Agendamento realizado!", {
+        description: `Agendado para o dia: ${format(
+          selectedDate,
+          "dd/MM/yyyy 'as' HH:mm",
+        )}`,
+        action: {
+          label: "Ver Agendamentos",
+          onClick: () => {
+            router.push("/bookings");
+          },
+        },
+      });
 
       handleBookingSheetIsopenChange();
     } catch (error) {
@@ -281,10 +287,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
           )}
 
           <SheetFooter className="mb-5 px-5">
-            <Button
-              onClick={handleCreatingBooking}
-              disabled={!selectedDay || !selectedTime}
-            >
+            <Button onClick={handleCreatingBooking} disabled={!selectedDate}>
               Confirmar
             </Button>
           </SheetFooter>

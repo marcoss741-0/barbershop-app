@@ -1,44 +1,9 @@
-import { getServerSession } from "next-auth";
 import Header from "../_components/header";
-import { authOptions } from "../_lib/auth-option";
-import db from "../_lib/prisma";
-import { notFound } from "next/navigation";
 import BookingItem from "../_components/booking-item";
+import { queryAllBookings } from "../_data/query-on-db";
 
 const Bookings = async () => {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    return notFound();
-  }
-
-  const allBookings = await db.booking.findMany({
-    where: {
-      userId: (session.user as { id: string }).id,
-      OR: [
-        {
-          date: {
-            gte: new Date(),
-          },
-        },
-        {
-          date: {
-            lte: new Date(),
-          },
-        },
-      ],
-    },
-    include: {
-      service: {
-        include: {
-          barbershop: true,
-        },
-      },
-    },
-    orderBy: {
-      date: "desc",
-    },
-  });
+  const allBookings = await queryAllBookings();
 
   const confirmedBookings = allBookings.filter(
     (booking) => booking.date >= new Date(),

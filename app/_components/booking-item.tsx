@@ -74,14 +74,14 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             <BookingSummary booking={booking} />
           </div>
         </SheetTrigger>
-        <SheetContent className="mx-auto flex h-[99.9vh] w-[90%] max-w-md flex-col overflow-y-auto rounded-t-lg p-4 [&::-webkit-scrollbar]:hidden">
+        <SheetContent className="mx-auto flex h-[90vh] w-[90%] flex-col overflow-y-auto rounded-t-lg p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
           <SheetHeader className="border-b border-solid py-3">
             <SheetTitle className="text-center text-lg font-semibold">
               Informações da reserva
             </SheetTitle>
           </SheetHeader>
 
-          <div className="space-y-5 p-3">
+          <div className="space-y-4 p-3">
             <div className="relative flex h-[160px] w-full items-end">
               <Image
                 src="/map.png"
@@ -108,13 +108,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             <Badge variant={isConfirmed ? "default" : "secondary"}>
               {isConfirmed ? "Confirmado" : "Finalizado"}
             </Badge>
-            {/* Booking resume */}
 
             <BookingResume
               barbershop={barbershop}
               service={booking.service}
               selectedDate={booking.date}
             />
+
             <div className="flex flex-col gap-3 p-5">
               <h2 className="text-sm font-normal text-gray-400">CONTATO</h2>
               {barbershop.phones.map((phone, index) => (
@@ -122,17 +122,18 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               ))}
             </div>
           </div>
-          <SheetFooter className="mb-3">
-            <div className="flex w-full justify-between gap-2">
+
+          <SheetFooter className="mb-3 px-4">
+            <div className="flex w-full flex-wrap justify-between gap-3">
               <SheetClose asChild>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full sm:w-auto">
                   Voltar
                 </Button>
               </SheetClose>
               {isConfirmed && (
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                   <DrawerTrigger asChild>
-                    <Button variant="destructive" className="w-full">
+                    <Button variant="destructive" className="w-full sm:w-auto">
                       Cancelar reserva
                     </Button>
                   </DrawerTrigger>

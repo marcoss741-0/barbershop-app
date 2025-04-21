@@ -1,7 +1,6 @@
 import Header from "@/app/_components/header";
 import { Button } from "./_components/ui/button";
 import Image from "next/image";
-import db from "./_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { ShortSearchOptions } from "./_constants/short-search";
 import BookingItem from "./_components/booking-item";
@@ -11,37 +10,22 @@ import { authOptions } from "./_lib/auth-option";
 import { Prisma } from "@prisma/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  queryBarbershops,
+  queryBookings,
+  queryMostPopularBarber,
+} from "./_data/query-on-db";
+import Link from "next/link";
+import FastSearch from "./_components/fast-search-buttons";
 
 const Home = async () => {
+  // Check if the user is authenticated
   const session = await getServerSession(authOptions);
-  const babershops = await db.barbershop.findMany({});
-  const popularBarbershop = await db.barbershop.findMany({
-    take: 5,
-    orderBy: {
-      name: "desc",
-    },
-  });
 
-  const bookings = session?.user
-    ? await db.booking.findMany({
-        where: {
-          userId: (session?.user as { id: string })?.id,
-          date: {
-            gte: new Date(),
-          },
-        },
-        include: {
-          service: {
-            include: {
-              barbershop: true,
-            },
-          },
-        },
-        orderBy: {
-          date: "desc",
-        },
-      })
-    : [];
+  // Fetch data from the database
+  const babershops = await queryBarbershops();
+  const popularBarbershop = await queryMostPopularBarber();
+  const bookings = await queryBookings();
 
   return (
     <>
@@ -64,21 +48,11 @@ const Home = async () => {
           <div className="mt-6">
             <SearchInput />
           </div>
-
-          <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-            {ShortSearchOptions.map((options) => (
-              <Button className="cursor-pointer gap-2" variant="secondary">
-                <Image
-                  src={options.iconUrl}
-                  width={16}
-                  height={16}
-                  alt="corte"
-                />
-                {options.title}
-              </Button>
-            ))}
-          </div>
-
+          {
+            <>
+              <FastSearch />
+            </>
+          }
           <div className="relative mt-6 flex h-36 w-full items-center rounded-md">
             <Image
               fill
