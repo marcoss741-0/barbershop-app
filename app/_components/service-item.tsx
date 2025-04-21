@@ -14,7 +14,7 @@ import {
 } from "./ui/sheet";
 import { Calendar } from "./ui/calendar";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format, set } from "date-fns";
 import { Pick } from "@prisma/client/runtime/library";
 import { toast } from "sonner";
@@ -23,10 +23,11 @@ import { useSession } from "next-auth/react";
 import { cachedGetBookings } from "../_actions/get-bookings";
 import { Dialog, DialogContent } from "./ui/dialog";
 import SigninDialog from "./signin-dialog";
+import BookingResume from "./booking-resume";
 
 interface BarbershopServicesProps {
   service: BarbershopService;
-  barbershop?: Pick<Barbershop, "name">;
+  barbershop: Pick<Barbershop, "name">;
 }
 
 const TIME_LIST = [
@@ -102,6 +103,14 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
     };
     fetchBookings();
   }, [selectedDay, jsonService.id]);
+
+  const selectedDate = useMemo(() => {
+    if (!selectedDay || !selectedTime) return;
+    return set(selectedDay, {
+      hours: Number(selectedTime?.split(":")[0]),
+      minutes: Number(selectedTime?.split(":")[1]),
+    });
+  }, [selectedDay, selectedTime]);
 
   const handleBookingSheetIsopenChange = () => {
     setSelectedDay(undefined);
@@ -259,41 +268,14 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
             </>
           )}
 
-          {selectedDay && (
+          {selectedDate && (
             <>
               <div className="p-5">
-                <Card>
-                  <CardContent className="space-y-3 p-3">
-                    <div className="flex items-center justify-between">
-                      <h2 className="font-bold">{jsonService.name}</h2>
-                      <p className="text-sm font-bold">
-                        {Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(Number(jsonService.price))}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-sm text-gray-400">Data</h2>
-                      <p className="text-sm">
-                        {format(selectedDay, "d 'de' MMMM", {
-                          locale: ptBR,
-                        })}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-sm text-gray-400">Horário</h2>
-                      <p className="text-sm">{selectedTime}</p>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-sm text-gray-400">Barbearia</h2>
-                      <p className="text-sm">{barbershop?.name}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+                <BookingResume
+                  barbershop={barbershop}
+                  service={service}
+                  selectedDate={selectedDate}
+                />
               </div>
             </>
           )}

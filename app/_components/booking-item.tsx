@@ -4,8 +4,7 @@ import { Prisma } from "@prisma/client";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
-import { format, isFuture } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { isFuture } from "date-fns";
 import {
   Sheet,
   SheetClose,
@@ -32,6 +31,7 @@ import {
 import { toast } from "sonner";
 import { deleteBooking } from "../_actions/delete-booking";
 import { useState } from "react";
+import BookingResume from "./booking-resume";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -108,43 +108,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             <Badge variant={isConfirmed ? "default" : "secondary"}>
               {isConfirmed ? "Confirmado" : "Finalizado"}
             </Badge>
-            <Card>
-              <CardContent className="space-y-3 p-3">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-bold">
-                    {JSON.parse(JSON.stringify(booking.service.name))}
-                  </h2>
-                  <p className="text-sm font-bold">
-                    {Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(
-                      Number(JSON.parse(JSON.stringify(booking.service.price))),
-                    )}
-                  </p>
-                </div>
+            {/* Booking resume */}
 
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm text-gray-400">Data</h2>
-                  <p className="text-sm capitalize">
-                    {format(booking.date, "d 'de' MMMM", {
-                      locale: ptBR,
-                    })}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm text-gray-400">Horário</h2>
-                  <p className="text-sm">{format(booking.date, "HH:mm")}</p>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm text-gray-400">Barbearia</h2>
-                  <p className="text-sm">{barbershop.name}</p>
-                </div>
-              </CardContent>
-            </Card>
-
+            <BookingResume
+              barbershop={barbershop}
+              service={booking.service}
+              selectedDate={booking.date}
+            />
             <div className="flex flex-col gap-3 p-5">
               <h2 className="text-sm font-normal text-gray-400">CONTATO</h2>
               {barbershop.phones.map((phone, index) => (

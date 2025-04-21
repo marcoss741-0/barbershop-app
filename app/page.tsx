@@ -9,6 +9,8 @@ import SearchInput from "./_components/search";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./_lib/auth-option";
 import { Prisma } from "@prisma/client";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -47,10 +49,17 @@ const Home = async () => {
         <Header />
 
         <div className="gap-1 px-5 py-6">
-          <h2 className="text-xl font-semibold">
-            Olá, <span className="font-bold">Marcos!</span>
+          <h2 className="text-xl font-normal">
+            Olá,{" "}
+            <span className="font-medium capitalize text-primary">
+              {session?.user?.name
+                ? `${session.user.name.split(" ")[0]}`
+                : "Bem vindos!"}
+            </span>
           </h2>
-          <p className="text-[14px] font-normal">Quinta, 10 de Abril</p>
+          <p className="text-[14px] font-normal capitalize text-primary-foreground">
+            {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
+          </p>
 
           <div className="mt-6">
             <SearchInput />

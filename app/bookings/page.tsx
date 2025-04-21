@@ -50,6 +50,13 @@ const Bookings = async () => {
   return (
     <>
       <Header />
+      {confirmedBookings.length === 0 && pastBookings.length === 0 && (
+        <div className="w-full items-center justify-center gap-2 space-y-4 p-5">
+          <p className="text-[18px] font-semibold text-primary-foreground">
+            Você não tem agendamentos no momento.
+          </p>
+        </div>
+      )}
       {confirmedBookings.length > 0 && (
         <div className="w-full items-center gap-2 space-y-4 p-5">
           <h3 className="text-[16px] font-semibold text-[#838896]">
