@@ -87,18 +87,21 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
     });
   };
 
+  //converted the service to json and then parsed it again to avoid the serialization error
+  const jsonService = JSON.parse(JSON.stringify(service));
+
   useEffect(() => {
     const fetchBookings = async () => {
       if (!selectedDay) return;
       await cachedGetBookings({
         date: selectedDay,
-        serviceId: JSON.parse(JSON.stringify(service.id)),
+        serviceId: jsonService.id,
       }).then((res) => {
         setDayBookings(res);
       });
     };
     fetchBookings();
-  }, [selectedDay, JSON.parse(JSON.stringify(service.id))]);
+  }, [selectedDay, jsonService.id]);
 
   const handleBookingSheetIsopenChange = () => {
     setSelectedDay(undefined);
@@ -128,7 +131,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
       await creatingBooking({
         date: newDate,
-        serviceId: JSON.parse(JSON.stringify(service.id)),
+        serviceId: jsonService.id,
       });
 
       toast.success("Agendamento realizado!!");
@@ -165,25 +168,19 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
           <div className="relative max-h-28 min-h-28 min-w-28 max-w-28">
             <Image
               className="rounded-lg object-cover"
-              alt={JSON.parse(JSON.stringify(service.name))}
-              src={JSON.parse(JSON.stringify(service.imageUrl))}
+              alt={jsonService.name}
+              src={jsonService.imageUrl}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               fill
             />
           </div>
           <div className="flex flex-col gap-1 p-2">
-            <h1 className="mb-2 text-sm font-semibold">
-              {JSON.parse(JSON.stringify(service.name))}
-            </h1>
-            <p className="text-xs text-gray-400">
-              {JSON.parse(JSON.stringify(service.description))}
-            </p>
+            <h1 className="mb-2 text-sm font-semibold">{jsonService.name}</h1>
+            <p className="text-xs text-gray-400">{jsonService.description}</p>
 
             <div className="flex items-center justify-between">
               <p className="font-semibold text-primary">
-                {formatCurrencyBRL(
-                  Number(JSON.parse(JSON.stringify(service.price))),
-                )}
+                {formatCurrencyBRL(Number(jsonService.price))}
               </p>
               <Button
                 variant="secondary"
@@ -243,9 +240,9 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
             <>
               <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
                 {getTimeList(dayBookings).length > 0 ? (
-                  getTimeList(dayBookings).map((hour) => (
+                  getTimeList(dayBookings).map((hour, index) => (
                     <Button
-                      key={hour}
+                      key={index}
                       className="rounded-full"
                       variant={selectedTime === hour ? "default" : "outline"}
                       onClick={() => handleTimeSelect(hour)}
@@ -268,16 +265,12 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
                 <Card>
                   <CardContent className="space-y-3 p-3">
                     <div className="flex items-center justify-between">
-                      <h2 className="font-bold">
-                        {JSON.parse(JSON.stringify(service.name))}
-                      </h2>
+                      <h2 className="font-bold">{jsonService.name}</h2>
                       <p className="text-sm font-bold">
                         {Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: "BRL",
-                        }).format(
-                          Number(JSON.parse(JSON.stringify(service.price))),
-                        )}
+                        }).format(Number(jsonService.price))}
                       </p>
                     </div>
 

@@ -31,7 +31,10 @@ const SearchInput = () => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="flex gap-2">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="flex items-center justify-center gap-2"
+        >
           <FormField
             control={form.control}
             name="title"
@@ -48,7 +51,7 @@ const SearchInput = () => {
               </FormItem>
             )}
           />
-          <Button size="sm" type="submit">
+          <Button size="default" type="submit">
             <SearchIcon size={18} />
           </Button>
         </form>

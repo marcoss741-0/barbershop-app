@@ -71,7 +71,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
       <Sheet open={sheetOpen} onOpenChange={handleSheetOpenChange}>
         <SheetTrigger asChild>
           <div className="cursor-pointer">
-            <BookingSummary booking={JSON.parse(JSON.stringify(booking))} />
+            <BookingSummary booking={booking} />
           </div>
         </SheetTrigger>
         <SheetContent className="mx-auto flex h-[99.9vh] w-[90%] max-w-md flex-col overflow-y-auto rounded-t-lg p-4 [&::-webkit-scrollbar]:hidden">
