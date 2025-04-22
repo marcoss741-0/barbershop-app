@@ -29,10 +29,6 @@ export const queryBookings = async () => {
 };
 
 export const queryMostPopularBarber = async () => {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return [];
-  }
   return await db.barbershop.findMany({
     take: 5,
     orderBy: {
@@ -42,10 +38,6 @@ export const queryMostPopularBarber = async () => {
 };
 
 export const queryBarbershops = async () => {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return [];
-  }
   return await db.barbershop.findMany({});
 };
 

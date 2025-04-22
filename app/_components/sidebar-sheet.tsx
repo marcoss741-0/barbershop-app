@@ -22,24 +22,24 @@ const SidebarSheet = () => {
   };
 
   const { data } = useSession();
-  const user = data?.user;
+  const { image, name, email } = data?.user || {};
 
   return (
     <>
-      <SheetContent>
+      <SheetContent className="w-[90%]">
         <SheetHeader>
           <SheetTitle className="text-left">Menu</SheetTitle>
         </SheetHeader>
         <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
-          {user ? (
+          {data?.user ? (
             <>
               <Avatar className="h-10 w-10">
-                <AvatarImage src={user?.image ?? ""} className="h-10 w-10" />
-                <AvatarFallback>{user.name}</AvatarFallback>
+                <AvatarImage src={image || ""} className="h-10 w-10" />
+                <AvatarFallback>{name?.split(" ", 1) || ""}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <p className="text-[16px] font-bold">{user?.name}</p>
-                <p className="text-xs font-normal">{user?.email}</p>
+                <p className="text-[16px] font-bold">{name}</p>
+                <p className="text-xs font-normal">{email}</p>
               </div>
             </>
           ) : (
@@ -111,7 +111,7 @@ const SidebarSheet = () => {
           ))}
         </div>
 
-        {user && (
+        {data?.user && (
           <>
             <div className="flex w-full items-center justify-start gap-2 py-5">
               <Button

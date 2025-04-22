@@ -74,7 +74,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             <BookingSummary booking={booking} />
           </div>
         </SheetTrigger>
-        <SheetContent className="mx-auto flex h-[90vh] w-[90%] flex-col overflow-y-auto rounded-t-lg p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
+        <SheetContent className="mx-auto flex max-h-screen w-[90%] flex-col overflow-y-auto rounded-t-lg p-4 sm:p-6 [&::-webkit-scrollbar]:hidden">
           <SheetHeader className="border-b border-solid py-3">
             <SheetTitle className="text-center text-lg font-semibold">
               Informações da reserva
@@ -123,7 +123,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             </div>
           </div>
 
-          <SheetFooter className="mb-3 px-4">
+          <SheetFooter className="mb-5 px-4">
             <div className="flex w-full flex-wrap justify-between gap-3">
               <SheetClose asChild>
                 <Button variant="outline" className="w-full sm:w-auto">
