@@ -12,6 +12,6 @@ export const deleteBooking = async (bookingId: string) => {
 };
 
 revalidatePath("/bookings");
-revalidatePath("/barbershops/[id]");
+revalidatePath("/barbershops/[id]", "page");
 revalidatePath("/barbershops");
 revalidatePath("/");

@@ -24,7 +24,7 @@ const creatingBooking = async (params: CreatingBookingParams) => {
   });
 };
 
-revalidatePath("/barbershops/[id]");
+revalidatePath("/barbershops/[id]", "page");
 revalidatePath("/barbershops");
 revalidatePath("/bookings");
 revalidatePath("/");

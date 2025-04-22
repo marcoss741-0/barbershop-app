@@ -30,7 +30,7 @@ const SidebarSheet = () => {
         <SheetHeader>
           <SheetTitle className="text-left">Menu</SheetTitle>
         </SheetHeader>
-        <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
+        <div className="flex w-full items-center justify-start gap-3 border-b border-solid py-5">
           {data?.user ? (
             <>
               <Avatar className="h-10 w-10">
