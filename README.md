@@ -26,4 +26,3 @@ A barber shop management application built with Next.js, Prisma, and Radix UI.
 ![Barbershops](https://i.imgur.com/du3k7v2.png)
 ![Services](https://i.imgur.com/4xh7v2S.png)
 ![Bookings](https://i.imgur.com/m6vX9W5.png)
-/**\*\*\*** 22a08340-7352-4dae-8a82-143a52ef01e7 **\*\*\***/
