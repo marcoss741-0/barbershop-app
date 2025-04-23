@@ -1,22 +1,34 @@
 "use client";
 
-import {
-  HomeIcon,
-  CalendarDaysIcon,
-  LogOutIcon,
-  LogInIcon,
-} from "lucide-react";
+import { HomeIcon, CalendarDaysIcon, LogOutIcon } from "lucide-react";
 import { ShortSearchOptions } from "../_constants/short-search";
 import { Button } from "./ui/button";
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import Link from "next/link";
 import Image from "next/image";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import SigninDialog from "./signin-dialog";
+import ChoiceLogin from "./choice-login";
+import { toast } from "sonner";
+import { useTransition } from "react";
+import { Progress } from "./ui/progress";
 
 const SidebarSheet = () => {
+  const [isPending, startTransition] = useTransition();
+
+  const handleLoginWithGoogle = () => {
+    try {
+      startTransition(async () => {
+        await signIn("google");
+        toast.success("Login realizado!");
+      });
+    } catch (error) {
+      toast.error("Erro ao fazer login com o Google.", {
+        description: "Tente novamente mais tarde." + error,
+      });
+    }
+  };
+
   const handleLogoutWithGoogle = async () => {
     await signOut();
   };
@@ -26,7 +38,7 @@ const SidebarSheet = () => {
 
   return (
     <>
-      <SheetContent className="w-[90%]">
+      <SheetContent className="&[::-webkit-scrollbar]:hidden w-[90%] overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="text-left">Menu</SheetTitle>
         </SheetHeader>
@@ -44,17 +56,10 @@ const SidebarSheet = () => {
             </>
           ) : (
             <>
-              <h2 className="text-[16px] font-bold">Olá, Faça seu login!</h2>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="icon" className="cursor-pointer">
-                    <LogInIcon size={18} />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="w-[90%] rounded-xl">
-                  <SigninDialog />
-                </DialogContent>
-              </Dialog>
+              <ChoiceLogin
+                action={handleLoginWithGoogle}
+                isPending={isPending}
+              />
             </>
           )}
         </div>

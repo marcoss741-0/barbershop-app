@@ -33,7 +33,7 @@ const SigninDialog = () => {
       </DialogHeader>
       <Button
         className="items-center gap-2 text-[14px] font-bold"
-        variant="outline"
+        variant="secondary"
         disabled={loading}
         onClick={handleLoginWithGoogle}
       >
