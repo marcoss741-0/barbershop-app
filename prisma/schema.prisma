@@ -8,6 +8,16 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Owner {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  password    String
+  barbershops Barbershop[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -67,9 +77,11 @@ model Barbershop {
   phones      String[]
   description String
   imageUrl    String
+  ownerId     String?
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
   services    BarbershopService[]
+  owner       Owner?              @relation(fields: [ownerId], references: [id])
 }
 
 model BarbershopService {
