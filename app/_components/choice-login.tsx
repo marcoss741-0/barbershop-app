@@ -67,8 +67,8 @@ const ChoiceLogin = ({ action, isPending }: ChoiceLoginProps) => {
             <CardHeader>
               <CardTitle>Faça parte</CardTitle>
               <CardDescription>
-                Se você possui uma barbearia e quer se aproximar que aumentar
-                usa clientela faça parte da nossa equipe.
+                Se você possui uma barbearia e quer aumentar
+                sua clientela faça parte da nossa equipe.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
