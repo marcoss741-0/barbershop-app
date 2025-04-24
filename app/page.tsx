@@ -1,8 +1,6 @@
 import Header from "@/app/_components/header";
-import { Button } from "./_components/ui/button";
 import Image from "next/image";
 import BarbershopItem from "./_components/barbershop-item";
-import { ShortSearchOptions } from "./_constants/short-search";
 import BookingItem from "./_components/booking-item";
 import SearchInput from "./_components/search";
 import { getServerSession } from "next-auth";
@@ -15,7 +13,6 @@ import {
   queryBookings,
   queryMostPopularBarber,
 } from "./_data/query-on-db";
-import Link from "next/link";
 import FastSearch from "./_components/fast-search-buttons";
 
 const Home = async () => {

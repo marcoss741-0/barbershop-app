@@ -38,6 +38,7 @@ const SidebarSheet = () => {
 
   const { data } = useSession();
   const { image, name, email } = data?.user || {};
+  console.log(data);
 
   return (
     <>
