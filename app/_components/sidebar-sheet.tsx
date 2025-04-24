@@ -69,7 +69,7 @@ const SidebarSheet = () => {
                   ÔmegaBarber´s.
                 </a>
                 <LoginForm
-                  isPending={isPending}
+                  isLoading={isPending}
                   loginWithGoogle={handleLoginWithGoogle}
                 />
               </div>

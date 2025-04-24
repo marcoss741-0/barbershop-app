@@ -15,26 +15,17 @@ import { useTransition } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
+interface LoginFormProps {
+  loginWithGoogle: () => void;
+  isLoading: boolean;
+}
+
 export function LoginForm({
   className,
-
+  loginWithGoogle,
+  isLoading,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [isPending, startTransition] = useTransition();
-
-  const handleLoginWithGoogle = () => {
-    try {
-      startTransition(async () => {
-        await signIn("google");
-        toast.success("Login realizado!");
-      });
-    } catch (error) {
-      toast.error("Erro ao fazer login com o Google.", {
-        description: "Tente novamente mais tarde." + error,
-      });
-    }
-  };
-
+}: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -49,14 +40,23 @@ export function LoginForm({
                 <Button
                   variant="secondary"
                   className="w-full gap-2"
-                  onClick={handleLoginWithGoogle}
+                  onClick={loginWithGoogle}
                 >
-                  <Image
-                    src="/google.svg"
-                    width={20}
-                    height={20}
-                    alt="Login with google"
-                  />
+                  {!isLoading ? (
+                    <Image
+                      src="/google.svg"
+                      width={20}
+                      height={20}
+                      alt="Login with google"
+                    />
+                  ) : (
+                    <Image
+                      src="/loading.svg"
+                      width={20}
+                      height={20}
+                      alt="is loading"
+                    />
+                  )}
                   Entrar com Google
                 </Button>
               </div>
