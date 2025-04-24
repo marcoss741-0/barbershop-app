@@ -11,23 +11,17 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { SquareArrowUpRight } from "lucide-react";
-import { useTransition } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
 export function LoginForm({
   className,
-
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [isPending, startTransition] = useTransition();
-
-  const handleLoginWithGoogle = () => {
+  const handleLoginWithGoogle = async () => {
     try {
-      startTransition(async () => {
         await signIn("google");
         toast.success("Login realizado!");
-      });
     } catch (error) {
       toast.error("Erro ao fazer login com o Google.", {
         description: "Tente novamente mais tarde." + error,
@@ -51,21 +45,13 @@ export function LoginForm({
                   className="w-full gap-2"
                   onClick={handleLoginWithGoogle}
                 >
-                  {!isPending ? (
                     <Image
                       src="/google.svg"
                       width={20}
                       height={20}
                       alt="Login with google"
                     />
-                  ) : (
-                    <Image
-                      src="/loading.svg"
-                      width={20}
-                      height={20}
-                      alt="Loading"
-                    />
-                  )}
+              
                   Entrar com Google
                 </Button>
               </div>
