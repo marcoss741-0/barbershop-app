@@ -11,18 +11,30 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { SquareArrowUpRight } from "lucide-react";
-
-interface LoginFormProps {
-  LoginAction: () => void;
-  isPending: boolean;
-}
+import { useTransition } from "react";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
-  LoginAction,
-  isPending,
+
   ...props
-}: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
+}: React.ComponentPropsWithoutRef<"div">) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleLoginWithGoogle = () => {
+    try {
+      startTransition(async () => {
+        await signIn("google");
+        toast.success("Login realizado!");
+      });
+    } catch (error) {
+      toast.error("Erro ao fazer login com o Google.", {
+        description: "Tente novamente mais tarde." + error,
+      });
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -37,7 +49,7 @@ export function LoginForm({
                 <Button
                   variant="secondary"
                   className="w-full gap-2"
-                  onClick={LoginAction}
+                  onClick={handleLoginWithGoogle}
                 >
                   {!isPending ? (
                     <Image

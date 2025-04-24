@@ -6,34 +6,18 @@ import {
   LogOutIcon,
   Scissors,
   SquareArrowDownLeft,
+  Store,
 } from "lucide-react";
 import { ShortSearchOptions } from "../_constants/short-search";
 import { Button } from "./ui/button";
 import { SheetClose, SheetContent } from "./ui/sheet";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { toast } from "sonner";
-import { useTransition } from "react";
 import { LoginForm } from "./login-form";
 
 const SidebarSheet = () => {
-  const [isPending, startTransition] = useTransition();
-
-  const handleLoginWithGoogle = () => {
-    try {
-      startTransition(async () => {
-        await signIn("google");
-        toast.success("Login realizado!");
-      });
-    } catch (error) {
-      toast.error("Erro ao fazer login com o Google.", {
-        description: "Tente novamente mais tarde." + error,
-      });
-    }
-  };
-
   const handleLogoutWithGoogle = async () => {
     await signOut();
   };
@@ -70,10 +54,7 @@ const SidebarSheet = () => {
                   </div>
                   ÔmegaBarber´s.
                 </a>
-                <LoginForm
-                  LoginAction={handleLoginWithGoogle}
-                  isPending={isPending}
-                />
+                <LoginForm />
               </div>
               <SheetClose>
                 <Button variant="secondary" className="gap-2">
@@ -89,7 +70,7 @@ const SidebarSheet = () => {
           <div className="flex flex-col gap-2 border-b border-solid py-5">
             <SheetClose asChild>
               <Button
-                size="sm"
+                size="lg"
                 className="justify-start gap-2"
                 variant="ghost"
                 asChild
@@ -101,9 +82,14 @@ const SidebarSheet = () => {
               </Button>
             </SheetClose>
 
+            <Button variant="ghost" size="lg" className="justify-start gap-2">
+              <Store />
+              Minhas Barbearias
+            </Button>
+
             <Button
               variant="ghost"
-              size="sm"
+              size="lg"
               className="justify-start gap-2"
               asChild
             >
@@ -114,7 +100,7 @@ const SidebarSheet = () => {
             </Button>
           </div>
         )}
-        {data?.user && (
+        {/* {data?.user && (
           <>
             <div className="flex flex-col gap-2 border-b border-solid py-5">
               {ShortSearchOptions.map((option) => (
@@ -141,7 +127,7 @@ const SidebarSheet = () => {
               ))}
             </div>
           </>
-        )}
+        )} */}
         {data?.user && (
           <>
             <div className="flex w-full items-center justify-start gap-2 py-5">

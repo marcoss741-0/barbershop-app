@@ -57,7 +57,7 @@ const Home = async () => {
             <Image
               fill
               priority
-              src="/banner.png"
+              src="/banner2.svg"
               alt="Corte como os melhores da cidade!"
               className="rounded-md object-cover"
             />
