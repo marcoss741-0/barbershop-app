@@ -47,7 +47,7 @@ const SearchInput = () => {
                     className="w-full"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="flex" />
               </FormItem>
             )}
           />

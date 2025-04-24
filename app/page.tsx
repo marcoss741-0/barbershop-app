@@ -41,7 +41,7 @@ const Home = async () => {
                 : "Bem vindos!"}
             </span>
           </h2>
-          <p className="text-[14px] font-normal capitalize text-primary-foreground">
+          <p className="text-[14px] font-normal capitalize text-primary">
             {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
           </p>
 
