@@ -8,16 +8,30 @@ import {
   SquareArrowDownLeft,
   Store,
 } from "lucide-react";
-import { ShortSearchOptions } from "../_constants/short-search";
 import { Button } from "./ui/button";
 import { SheetClose, SheetContent } from "./ui/sheet";
 import Link from "next/link";
-import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LoginForm } from "./login-form";
+import { toast } from "sonner";
+import { useTransition } from "react";
 
 const SidebarSheet = () => {
+  const [isPending, startTransition] = useTransition();
+
+  const handleLoginWithGoogle = () => {
+    try {
+      startTransition(async () => {
+        await signIn("google");
+        toast.success("Login realizado!");
+      });
+    } catch (error) {
+      toast.error("Erro ao fazer login com o Google.", {
+        description: "Tente novamente mais tarde." + error,
+      });
+    }
+  };
   const handleLogoutWithGoogle = async () => {
     await signOut();
   };
@@ -54,7 +68,10 @@ const SidebarSheet = () => {
                   </div>
                   ÔmegaBarber´s.
                 </a>
-                <LoginForm />
+                <LoginForm
+                  isPending={isPending}
+                  loginWithGoogle={handleLoginWithGoogle}
+                />
               </div>
               <SheetClose>
                 <Button variant="secondary" className="gap-2">
