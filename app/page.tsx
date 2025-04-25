@@ -1,10 +1,8 @@
-import Header from "@/app/_components/header";
+import Header from "./_components/header";
 import Image from "next/image";
 import BarbershopItem from "./_components/barbershop-item";
 import BookingItem from "./_components/booking-item";
 import SearchInput from "./_components/search";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./_lib/auth-option";
 import { Prisma } from "@prisma/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -14,10 +12,11 @@ import {
   queryMostPopularBarber,
 } from "./_data/query-on-db";
 import FastSearch from "./_components/fast-search-buttons";
+import { auth } from "./_lib/auth-option";
 
 const Home = async () => {
   // Check if the user is authenticated
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   // Fetch data from the database
   const babershops = await queryBarbershops();

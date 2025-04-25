@@ -1,10 +1,9 @@
-import { getServerSession } from "next-auth";
 import db from "../_lib/prisma";
-import { authOptions } from "../_lib/auth-option";
+import { auth } from "../_lib/auth-option";
 import { notFound } from "next/navigation";
 
 export const queryBookings = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user) {
     return [];
   }
@@ -85,7 +84,7 @@ export const queryBarbershopServiceByName = async (
 };
 
 export const queryAllBookings = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session?.user) {
     return notFound();

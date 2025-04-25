@@ -7,10 +7,10 @@ import AuthProvider from "./_providers/auth";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-const robotoSlab = Roboto_Slab({
-  subsets: ["latin"],
-  weight: ["400", "700"], // Pode escolher outros pesos se quiser
-});
+// const robotoSlab = Roboto_Slab({
+//   subsets: ["latin"],
+//   weight: ["400", "700"],
+// });
 
 export const metadata: Metadata = {
   title: "Ômega Barber´s",
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning className="dark">
-      <body className={`${robotoSlab.className}`}>
+      <body className={`${montserrat.className}`}>
         <AuthProvider>
           <div className="flex h-full flex-col">
             <div className="flex-1"> {children}</div>

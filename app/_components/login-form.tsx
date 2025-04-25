@@ -10,47 +10,28 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { SquareArrowUpRight } from "lucide-react";
-import { useState, useTransition } from "react";
-import { signIn } from "next-auth/react";
-import { toast } from "sonner";
+import Link from "next/link";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
-  isLoading: boolean;
+  isGoogleLoading: boolean;
+  credLogin: (mail: string, password: string) => void;
 }
 
 export function LoginForm({
   className,
   loginWithGoogle,
-  isLoading,
+  credLogin,
+  isGoogleLoading,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isPending, startTransition] = useTransition();
-
-  const handleLogin = (e: React.FormEvent) => {
+  const credentialsLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    startTransition(async () => {
-      await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      })
-        .then((response) => {
-          if (response?.error) {
-            console.log(response);
-            toast.error("Email ou senha inválidos.");
-          } else {
-            toast.success("Login realizado com sucesso.");
-            console.log(response);
-          }
-        })
-        .catch(() => {
-          toast.error("Erro ao realizar login.");
-        });
-    });
+    const formData = new FormData(e.currentTarget);
+    const mail = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    credLogin(mail, password);
   };
 
   return (
@@ -68,7 +49,7 @@ export function LoginForm({
                 className="w-full gap-2"
                 onClick={loginWithGoogle}
               >
-                {!isLoading ? (
+                {!isGoogleLoading ? (
                   <Image
                     src="/google.svg"
                     width={20}
@@ -91,62 +72,41 @@ export function LoginForm({
                 Ou continue com
               </span>
             </div>
-            <form onSubmit={handleLogin} className="grid gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="m@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Senha</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-4 hover:underline"
-                  >
-                    Esqueceu sua senha?
-                  </a>
+
+            <form onSubmit={credentialsLogin} className="w-full">
+              <div className="grid gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="m@example.com"
+                    required
+                  />
                 </div>
-                <Input
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  required
-                />
+                <div className="grid gap-2">
+                  <Label htmlFor="password">Senha</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full gap-2 text-primary-foreground"
+                >
+                  Entrar
+                </Button>
               </div>
-              <Button
-                type="submit"
-                className="w-full gap-2 text-primary-foreground"
-              >
-                {isPending ? (
-                  <>
-                    <Image
-                      src="/loading2.svg"
-                      alt="loading"
-                      width={20}
-                      height={20}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <SquareArrowUpRight size={18} />
-                  </>
-                )}
-                Entrar
-              </Button>
             </form>
             <div className="text-center text-sm">
               Não tem uma conta?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <Link href="/users" className="underline underline-offset-4">
                 Inscreva-se
-              </a>
+              </Link>
             </div>
           </div>
         </CardContent>

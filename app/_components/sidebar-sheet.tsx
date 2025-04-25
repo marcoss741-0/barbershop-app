@@ -11,34 +11,41 @@ import {
 import { Button } from "./ui/button";
 import { SheetClose, SheetContent } from "./ui/sheet";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LoginForm } from "./login-form";
 import { toast } from "sonner";
 import { useTransition } from "react";
+import { initUser, offUser } from "../users/_actions/manager-session";
+import { useRouter } from "next/navigation";
 
 const SidebarSheet = () => {
-  const [isPending, startTransition] = useTransition();
+  const [isGoogleLoading, startTransition] = useTransition();
 
   const handleLoginWithGoogle = () => {
     try {
       startTransition(async () => {
-        await signIn("google");
+        await initUser();
         toast.success("Login realizado!");
       });
     } catch (error) {
-      toast.error("Erro ao fazer login com o Google.", {
-        description: "Tente novamente mais tarde." + error,
-      });
+      toast.error("Erro ao fazer login com o Google.");
     }
   };
-  const handleLogoutWithGoogle = async () => {
-    await signOut();
+
+  const handleLogout = async () => {
+    await offUser().then(() => {
+      window.location.reload();
+    });
   };
+
+  const handleLoginWithCredentials = async (
+    email: string,
+    password: string,
+  ) => {};
 
   const { data } = useSession();
   const { image, name, email } = data?.user || {};
-  console.log(data);
 
   return (
     <>
@@ -69,10 +76,15 @@ const SidebarSheet = () => {
                   </div>
                   ÔmegaBarber´s.
                 </a>
-                <LoginForm
-                  isLoading={isPending}
-                  loginWithGoogle={handleLoginWithGoogle}
-                />
+                <>
+                  {
+                    <LoginForm
+                      isGoogleLoading={isGoogleLoading}
+                      loginWithGoogle={handleLoginWithGoogle}
+                      credLogin={handleLoginWithCredentials}
+                    />
+                  }
+                </>
               </div>
               <SheetClose>
                 <Button variant="secondary" className="gap-2">
@@ -118,34 +130,7 @@ const SidebarSheet = () => {
             </Button>
           </div>
         )}
-        {/* {data?.user && (
-          <>
-            <div className="flex flex-col gap-2 border-b border-solid py-5">
-              {ShortSearchOptions.map((option) => (
-                <SheetClose key={option.title} asChild>
-                  <Link
-                    href={`/barbershops?service=${option.title}`}
-                    className="w-full"
-                  >
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start gap-3 p-3"
-                    >
-                      <Image
-                        src={option.iconUrl}
-                        alt={option.title}
-                        width={18}
-                        height={18}
-                      />
-                      {option.title}
-                    </Button>
-                  </Link>
-                </SheetClose>
-              ))}
-            </div>
-          </>
-        )} */}
+
         {data?.user && (
           <>
             <div className="flex w-full items-center justify-start gap-2 py-5">
@@ -153,7 +138,7 @@ const SidebarSheet = () => {
                 size="default"
                 variant="ghost"
                 className="w-full justify-start gap-2 p-3"
-                onClick={handleLogoutWithGoogle}
+                onClick={handleLogout}
               >
                 <LogOutIcon />
                 <p className="text-sm">Sair da Conta</p>
