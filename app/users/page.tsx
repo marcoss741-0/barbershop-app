@@ -15,6 +15,7 @@ import Link from "next/link";
 import { createUser } from "../_actions/creating-user";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { set } from "date-fns";
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -32,7 +33,9 @@ const RegisterForm = () => {
     })
       .then(() => {
         toast.success("Usuário criado com sucesso!");
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
       })
       .catch((err) => {
         console.error(err);

@@ -15,25 +15,14 @@ import Link from "next/link";
 interface LoginFormProps {
   loginWithGoogle: () => void;
   isGoogleLoading: boolean;
-  credLogin: (mail: string, password: string) => void;
 }
 
 export function LoginForm({
   className,
   loginWithGoogle,
-  credLogin,
   isGoogleLoading,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
-  const credentialsLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const mail = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    credLogin(mail, password);
-  };
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -73,7 +62,7 @@ export function LoginForm({
               </span>
             </div>
 
-            <form onSubmit={credentialsLogin} className="w-full">
+            <form onSubmit={() => {}} className="w-full">
               <div className="grid gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>

@@ -1,85 +1,39 @@
-// import { PrismaAdapter } from "@auth/prisma-adapter";
-// import { AuthOptions } from "next-auth";
-// import { Adapter } from "next-auth/adapters";
-// import db from "./prisma";
-// import GoogleProvider from "next-auth/providers/google";
-// import { compareSync } from "bcrypt-ts";
-// import Credentials from "next-auth/providers/credentials";
-
-// export const authOptions: AuthOptions = {
-//   adapter: PrismaAdapter(db) as Adapter,
-//   providers: [
-//     GoogleProvider({
-//       clientId: process.env.GOOGLE_CLIENT_ID as string,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-//     }),
-//     Credentials({
-//       credentials: {
-//         email: {},
-//         password: {},
-//       },
-//       async authorize(credentials) {
-//         const { email, password } = credentials as {
-//           email: string;
-//           password: string;
-//         };
-
-//         const user = await db.user.findUnique({
-//           where: {
-//             email,
-//           },
-//         });
-
-//         if (!user) {
-//           throw new Error("Usuário não encontrado.");
-//         }
-
-//         const isPasswordValid = compareSync(password, user.password as string);
-//         if (!isPasswordValid) {
-//           throw new Error("Senha inválida.");
-//         }
-
-//         return {
-//           id: user.id,
-//           name: user.name,
-//           email: user.email,
-//           image: user.image,
-//         };
-//       },
-//     }),
-//   ],
-//   callbacks: {
-//     async jwt({ token, user }) {
-//       if (user) {
-//         token.id = user.id ?? "";
-//         token.name = user.name ?? "";
-//         token.email = user.email ?? "";
-//         token.image = user.image ?? "";
-//       }
-//       return token;
-//     },
-//   },
-
-//   secret: process.env.NEXT_AUTH_SECRET,
-// };
-
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
 import db from "./prisma";
+import { compareSync } from "bcrypt-ts";
+import { findUserByCredentials } from "../users/_actions/find-user-by-credentials";
+import { string } from "zod";
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
-    // Credentials({});
+    Credentials({
+      credentials: {
+        email: {},
+        password: {},
+      },
+      authorize: async (credentials) => {
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
+
+        if (!email || !password) {
+          throw new Error("Email ou senha são obrigatórios.");
+        }
+
+        // Passando um objeto com mail e password
+        const user = await findUserByCredentials({ mail: email, password });
+
+        return user;
+      },
+    }),
   ],
 });
