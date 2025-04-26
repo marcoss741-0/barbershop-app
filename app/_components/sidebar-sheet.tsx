@@ -17,7 +17,10 @@ const SidebarSheet = async () => {
           <>
             <div className="flex items-center justify-start gap-2 border-b border-solid p-5 md:p-10">
               <Avatar className="h-10 w-10">
-                <AvatarImage src={image || ""} className="h-10 w-10" />
+                <AvatarImage
+                  src={image == null ? "/perfil.png" : image}
+                  className="h-10 w-10"
+                />
                 <AvatarFallback>{name?.split(" ", 1) || ""}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">

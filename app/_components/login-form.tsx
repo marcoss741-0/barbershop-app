@@ -45,21 +45,25 @@ export function LoginForm({
         password,
       });
 
+      if (result.code == undefined) {
+        router.refresh;
+      }
+
       console.log("Resultado do login:", result);
 
       if (result?.error) {
-        console.error("Erro no login:", result.error);
+        // console.error("Erro no login:", result.error);
         toast.error("Email ou senha incorretos. Por favor, tente novamente.");
         return;
       }
 
       if (result?.ok) {
-        console.log("Login bem-sucedido, redirecionando...");
+        // console.log("Login bem-sucedido, redirecionando...");
         toast.success("Login realizado com sucesso!");
         router.push("/");
       }
     } catch (error) {
-      console.error("Erro inesperado no login:", error);
+      // console.error("Erro inesperado no login:", error);
       toast.error(
         "Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.",
       );
