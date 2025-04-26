@@ -1,6 +1,5 @@
 import db from "../_lib/prisma";
 import { auth } from "../_lib/auth-option";
-import { notFound } from "next/navigation";
 
 export const queryBookings = async () => {
   const session = await auth();
@@ -87,7 +86,7 @@ export const queryAllBookings = async () => {
   const session = await auth();
 
   if (!session?.user) {
-    return notFound();
+    throw new Error("Voce não esta logado!");
   }
   return await db.booking.findMany({
     where: {

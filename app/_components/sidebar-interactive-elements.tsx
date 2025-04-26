@@ -36,6 +36,9 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
     await offUser().then(() => {
       window.location.reload();
     });
+    setTimeout(() => {
+      router.push("/");
+    }, 1000);
   };
 
   return user ? (

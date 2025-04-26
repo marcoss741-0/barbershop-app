@@ -1,6 +1,7 @@
 import Header from "../_components/header";
 import BookingItem from "../_components/booking-item";
 import { queryAllBookings } from "../_data/query-on-db";
+import { auth } from "../_lib/auth-option";
 
 const Bookings = async () => {
   const allBookings = await queryAllBookings();
@@ -12,6 +13,7 @@ const Bookings = async () => {
   const pastBookings = allBookings.filter(
     (booking) => booking.date < new Date(),
   );
+
   return (
     <>
       <Header />
