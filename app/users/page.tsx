@@ -129,7 +129,7 @@ const RegisterForm = () => {
                           height={18}
                           alt="loading"
                         />
-                        Registrando...
+                        Registrando
                       </>
                     ) : (
                       "Registrar"

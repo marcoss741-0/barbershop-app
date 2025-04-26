@@ -11,10 +11,10 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import Link from "next/link";
-import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
@@ -28,9 +28,11 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
@@ -50,6 +52,7 @@ export function LoginForm({
       if (result.error == "CredentialsSignin") {
         // console.error("Erro no login:", result.error);
         toast.error("Email ou senha incorretos. Por favor, tente novamente.");
+        setIsLoading(false);
         return;
       }
 
@@ -61,6 +64,7 @@ export function LoginForm({
       toast.error(
         "Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.",
       );
+      setIsLoading(false);
     }
   };
 
@@ -127,9 +131,22 @@ export function LoginForm({
 
                 <Button
                   type="submit"
-                  className="w-full gap-2 text-primary-foreground"
+                  className="w-full gap-2 font-bold text-primary-foreground"
+                  disabled={isLoading}
                 >
-                  Entrar
+                  {isLoading ? (
+                    <>
+                      <Image
+                        src="/loading2.svg"
+                        width={20}
+                        height={20}
+                        alt="Carregando"
+                      />
+                      Entrando
+                    </>
+                  ) : (
+                    "Entrar"
+                  )}
                 </Button>
               </div>
             </form>
