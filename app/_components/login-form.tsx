@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
@@ -26,6 +27,8 @@ export function LoginForm({
   isGoogleLoading,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -33,13 +36,34 @@ export function LoginForm({
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
+    console.log("Iniciando tentativa de login para:", email);
 
-    console.log(result);
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      console.log("Resultado do login:", result);
+
+      if (result?.error) {
+        console.error("Erro no login:", result.error);
+        toast.error("Email ou senha incorretos. Por favor, tente novamente.");
+        return;
+      }
+
+      if (result?.ok) {
+        console.log("Login bem-sucedido, redirecionando...");
+        toast.success("Login realizado com sucesso!");
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Erro inesperado no login:", error);
+      toast.error(
+        "Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.",
+      );
+    }
   };
 
   return (

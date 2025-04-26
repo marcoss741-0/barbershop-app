@@ -12,35 +12,58 @@ import {
   CardTitle,
 } from "../_components/ui/card";
 import Link from "next/link";
-import { createUser } from "../_actions/creating-user";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { set } from "date-fns";
+import React, { useRef, useState } from "react";
 
 const RegisterForm = () => {
-  const router = useRouter();
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+  // Refs para os campos
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-    createUser({
-      name,
-      email,
-      password,
-    })
-      .then(() => {
-        toast.success("Usuário criado com sucesso!");
-        setTimeout(() => {
-          router.push("/");
-        }, 1500);
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Erro ao criar usuário, tente novamente mais tarde.");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Previne o comportamento padrão do formulário
+
+    const name = nameRef.current?.value || "";
+    const email = emailRef.current?.value || ""; // Corrigido para usar emailReff
+    const password = passwordRef.current?.value || ""; // Corrigido para usar passwordRef
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
       });
+
+      if (!response.ok) {
+        let errorMessage = "Erro ao criar usuário";
+        try {
+          const errorData = await response.json(); // Tenta processar o JSON
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          console.warn("Resposta da API não contém JSON válido.");
+        }
+        throw new Error(errorMessage);
+      }
+
+      toast.success("Usuário criado com sucesso!");
+      if (nameRef.current) nameRef.current.value = "";
+      if (emailRef.current) emailRef.current.value = "";
+      if (passwordRef.current) passwordRef.current.value = "";
+    } catch (err: any) {
+      console.error("Erro na requisição:", err.message);
+      toast.error(
+        err.message || "Erro ao criar usuário, tente novamente mais tarde.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,6 +89,7 @@ const RegisterForm = () => {
                       type="text"
                       placeholder="Digite seu nome"
                       required
+                      ref={nameRef}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -76,6 +100,7 @@ const RegisterForm = () => {
                       type="email"
                       placeholder="m@example.com"
                       required
+                      ref={emailRef}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -87,10 +112,11 @@ const RegisterForm = () => {
                       name="password"
                       type="password"
                       required
+                      ref={passwordRef}
                     />
                   </div>
-                  <Button type="submit" className="w-full">
-                    Registrar
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Registrando..." : "Registrar"}
                   </Button>
                 </div>
                 <div className="mt-4 text-center text-sm">
