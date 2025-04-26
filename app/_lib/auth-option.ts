@@ -4,8 +4,6 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import db from "./prisma";
 import { compareSync } from "bcrypt-ts";
-import { findUserByCredentials } from "../users/_actions/find-user-by-credentials";
-import { string } from "zod";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -20,19 +18,41 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+        try {
+          const { email, password } = credentials as {
+            email: string;
+            password: string;
+          };
 
-        if (!email || !password) {
-          throw new Error("Email ou senha são obrigatórios.");
+          if (!email || !password) {
+            throw new Error("Email e senha são obrigatórios.");
+          }
+
+          const user = await db.user.findUnique({
+            where: {
+              email,
+            },
+          });
+
+          if (!user) {
+            throw new Error("Usuario não encontrado");
+          }
+
+          const passwordMatch = compareSync(password, user.password);
+          if (!passwordMatch) {
+            throw new Error("Senha invalida!");
+          }
+
+          return {
+            id: user.id,
+            image: user.image,
+            name: user.name,
+            mail: user.email,
+          };
+        } catch (error) {
+          console.error("Erro ao autenticar:", error.message);
+          throw new Error(error.message || "Erro interno no servidor.");
         }
-
-        // Passando um objeto com mail e password
-        const user = await findUserByCredentials({ mail: email, password });
-
-        return user;
       },
     }),
   ],

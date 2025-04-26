@@ -11,6 +11,9 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import Link from "next/link";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
@@ -23,6 +26,22 @@ export function LoginForm({
   isGoogleLoading,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    console.log(result);
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -62,7 +81,7 @@ export function LoginForm({
               </span>
             </div>
 
-            <form onSubmit={() => {}} className="w-full">
+            <form onSubmit={handleSubmit} className="w-full">
               <div className="grid gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -83,6 +102,7 @@ export function LoginForm({
                     required
                   />
                 </div>
+
                 <Button
                   type="submit"
                   className="w-full gap-2 text-primary-foreground"
