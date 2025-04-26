@@ -2,8 +2,14 @@ import Header from "../_components/header";
 import BookingItem from "../_components/booking-item";
 import { queryAllBookings } from "../_data/query-on-db";
 import { auth } from "../_lib/auth-option";
+import { redirect } from "next/navigation";
 
 const Bookings = async () => {
+  const session = await auth();
+  if (!session || !session.user) {
+    redirect("/");
+    return null;
+  }
   const allBookings = await queryAllBookings();
 
   const confirmedBookings = allBookings.filter(

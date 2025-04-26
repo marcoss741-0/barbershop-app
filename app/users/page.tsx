@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 
 const RegisterForm = () => {
   // Refs para os campos
@@ -115,8 +116,24 @@ const RegisterForm = () => {
                       ref={passwordRef}
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Registrando..." : "Registrar"}
+                  <Button
+                    type="submit"
+                    className="w-full gap-2"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Image
+                          src="/loading2.svg"
+                          width={18}
+                          height={18}
+                          alt="loading"
+                        />
+                        Registrando...
+                      </>
+                    ) : (
+                      "Registrar"
+                    )}
                   </Button>
                 </div>
                 <div className="mt-4 text-center text-sm">
