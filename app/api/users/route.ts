@@ -1,30 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { createUser } from "../../users/_actions/creating-user";
+import { NextResponse } from "next/server";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  if (req.method === "POST") {
-    const { name, email, password } = req.body;
+export async function POST(req: Request) {
+  const { name, email, password } = await req.json();
 
-    if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Todos os campos são obrigatórios." });
-    }
+  if (!name || !email || !password) {
+    return NextResponse.json(
+      { error: "Todos os campos são obrigatórios." },
+      { status: 400 },
+    );
+  }
 
-    try {
-      const newUser = await createUser(name, email, password);
-      return res.status(201).json(newUser);
-    } catch (error: any) {
-      console.error("Erro ao criar usuário:", error.message);
-      return res.status(400).json({ error: error.message }); // Retorna o erro específico
-    }
-  } else {
-    res.setHeader("Allow", ["POST"]);
-    return res
-      .status(405)
-      .json({ error: `Método ${req.method} não permitido.` });
+  try {
+    const newUser = await createUser(name, email, password);
+    return NextResponse.json(newUser, { status: 201 });
+  } catch (error: any) {
+    console.error("Erro ao criar usuário:", error.message);
+    return NextResponse.json(
+      { error: error.message || "Erro ao criar usuário." },
+      { status: 400 },
+    );
   }
 }
