@@ -34,7 +34,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
 
   const handleLogout = async () => {
     await offUser().then(() => {
-      router.refresh();
+      window.location.reload();
     });
   };
 

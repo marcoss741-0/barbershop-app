@@ -1,13 +1,36 @@
-"use server";
+"use client";
 
 import { SheetContent } from "./ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { SidebarInteractiveElements } from "./sidebar-interactive-elements";
-import { auth, signIn } from "../_lib/auth-option";
+import { useEffect, useState } from "react";
 
-const SidebarSheet = async () => {
-  const data = await auth();
-  const user = data?.user;
+interface UserData {
+  user?: {
+    image?: string | null;
+    name?: string | null;
+    email?: string | null;
+  } | null;
+}
+
+const SidebarSheet = () => {
+  const [userData, setUserData] = useState<UserData>({});
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/auth/session");
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const user = userData?.user ?? null;
   const { image, name, email } = user || {};
 
   return (
