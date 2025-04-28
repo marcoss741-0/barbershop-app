@@ -100,12 +100,28 @@ async function seedDatabase() {
       },
     ];
 
+    const users = [
+      { name: "Marcos Martins", email: "teste@gmail.com" },
+      { name: "Matheus Martins", email: "teste2@gmail.com" },
+      { name: "Arthur Rodrigues", email: "teste3@gmail.com" },
+      { name: "Felipe Martins", email: "teste4@gmail.com" },
+      { name: "Richard Grady", email: "teste5@gmail.com" },
+      { name: "Thiado Silva", email: "teste6@gmail.com" },
+      { name: "Fred Guedes", email: "teste7@gmail.com" },
+      { name: "Bernard Gouveia", email: "teste8@gmail.com" },
+      { name: "Fausto Vera", email: "teste9@gmail.com" },
+      { name: "Allan Franco", email: "teste10@gmail.com" },
+    ];
+
     // Criar 10 barbearias com nomes e endereços fictícios
     const barbershops = [];
     for (let i = 0; i < 10; i++) {
       const name = creativeNames[i];
       const address = addresses[i];
       const imageUrl = images[i];
+
+      // Associa cada barbearia a um usuário do array `users`
+      const user = users[i % users.length]; // Garante que os usuários sejam reutilizados se houver mais barbearias do que usuários
 
       const barbershop = await prisma.barbershop.create({
         data: {
@@ -115,6 +131,15 @@ async function seedDatabase() {
           phones: ["(11) 99999-9999", "(11) 99999-9999"],
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
+          user: {
+            connectOrCreate: {
+              where: { email: user.email }, // Verifica se o usuário já existe pelo email
+              create: {
+                name: user.name,
+                email: user.email,
+              },
+            },
+          },
         },
       });
 
