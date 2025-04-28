@@ -58,9 +58,16 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
           </Button>
         </SheetClose>
 
-        <Button variant="ghost" size="lg" className="justify-start gap-2">
-          <Store />
-          Minhas Barbearias
+        <Button
+          variant="ghost"
+          size="lg"
+          className="justify-start gap-2"
+          asChild
+        >
+          <Link href={`/barbershops/manager/${user.email}`}>
+            <Store />
+            Minhas Barbearias
+          </Link>
         </Button>
 
         <Button

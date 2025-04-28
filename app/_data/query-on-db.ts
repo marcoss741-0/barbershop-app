@@ -116,3 +116,11 @@ export const queryAllBookings = async () => {
     },
   });
 };
+
+export const queryUser = async (email: string) => {
+  return await db.user.findUnique({
+    where: {
+      email,
+    },
+  });
+};
