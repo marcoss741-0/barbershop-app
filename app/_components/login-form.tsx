@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { cn } from "../_lib/utils";
 import { Button } from "./ui/button";
@@ -9,17 +11,38 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
   isGoogleLoading: boolean;
 }
+
+const schema = z.object({
+  email: z.string().email({
+    message: "Informe um email valído",
+  }),
+  password: z
+    .string()
+    .min(6, { message: "A senha deve ter no mínimo 6 caracteres" })
+    .max(32, { message: "A senha deve ter no máximo 32 caracteres" }),
+});
+
+type FormData = z.infer<typeof schema>;
 
 export function LoginForm({
   className,
@@ -27,44 +50,37 @@ export function LoginForm({
   isGoogleLoading,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & LoginFormProps) {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    console.log("Iniciando tentativa de login para:", email);
+  const onSubmit = async (data: FormData) => {
+    const { email, password } = data;
 
     try {
-      const result = await signIn("credentials", {
+      const response = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-
-      console.log("Resultado do login:", result);
-
-      if (result.error == "CredentialsSignin") {
-        // console.error("Erro no login:", result.error);
-        toast.error("Email ou senha incorretos. Por favor, tente novamente.");
-        setIsLoading(false);
-        return;
-      }
-
-      if (result.ok == true) {
+      if (response?.ok) {
         toast.success("Login realizado com sucesso!");
         window.location.reload();
+      }
+      if (response.error == "CredentialsSignin") {
+        toast.error("Email ou senha incorretos. Por favor, tente novamente.");
+        return;
       }
     } catch (error) {
       toast.error(
         "Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.",
       );
-      setIsLoading(false);
     }
   };
 
@@ -107,49 +123,69 @@ export function LoginForm({
               </span>
             </div>
 
-            <form onSubmit={handleSubmit} className="w-full">
-              <div className="grid gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="m@example.com"
-                    required
-                  />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="grid gap-6">
+                  <div className="grid gap-2">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              placeholder="m@exemplo.com"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Senha</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="********"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full gap-2 font-bold text-primary-foreground"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? (
+                      <>
+                        <Image
+                          src="/loading2.svg"
+                          width={20}
+                          height={20}
+                          alt="Carregando"
+                        />
+                        Entrando
+                      </>
+                    ) : (
+                      "Entrar"
+                    )}
+                  </Button>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Senha</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    name="password"
-                    required
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full gap-2 font-bold text-primary-foreground"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Image
-                        src="/loading2.svg"
-                        width={20}
-                        height={20}
-                        alt="Carregando"
-                      />
-                      Entrando
-                    </>
-                  ) : (
-                    "Entrar"
-                  )}
-                </Button>
-              </div>
-            </form>
+              </form>
+            </Form>
             <div className="text-center text-sm">
               Não tem uma conta?{" "}
               <Link href="/users" className="underline underline-offset-4">

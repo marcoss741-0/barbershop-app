@@ -1,6 +1,5 @@
 "use client";
 
-import { Label } from "../_components/ui/label";
 import { Input } from "../_components/ui/input";
 import { Button } from "../_components/ui/button";
 import Header from "../_components/header";
@@ -13,25 +12,50 @@ import {
 } from "../_components/ui/card";
 import Link from "next/link";
 import { toast } from "sonner";
-import React, { useRef, useState } from "react";
+import React from "react";
 import Image from "next/image";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../_components/ui/form";
 
-const RegisterForm = () => {
-  // Refs para os campos
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+const schema = z.object({
+  name: z.string().trim().min(2, {
+    message: "Digite o nome completo",
+  }),
+  email: z.string().email({
+    message: "Email inválido!",
+  }),
+  password: z
+    .string()
+    .min(6, { message: "A senha deve ter no mínimo 6 caracteres" })
+    .max(32, { message: "A senha deve ter no máximo 32 caracteres" }),
+});
 
-  const [isLoading, setIsLoading] = useState(false);
+type FormData = z.infer<typeof schema>;
 
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Previne o comportamento padrão do formulário
+const RegisterForm2 = () => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      name: "",
+      password: "",
+    },
+  });
 
-    const name = nameRef.current?.value || "";
-    const email = emailRef.current?.value || ""; // Corrigido para usar emailReff
-    const password = passwordRef.current?.value || ""; // Corrigido para usar passwordRef
+  const isLoading = form.formState.isSubmitting;
 
-    setIsLoading(true);
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    const { name, email, password } = data;
 
     try {
       const response = await fetch("/api/users", {
@@ -54,16 +78,16 @@ const RegisterForm = () => {
       }
 
       toast.success("Usuário criado com sucesso!");
-      if (nameRef.current) nameRef.current.value = "";
-      if (emailRef.current) emailRef.current.value = "";
-      if (passwordRef.current) passwordRef.current.value = "";
-    } catch (err: any) {
+      form.reset({
+        email: "",
+        password: "",
+        name: "",
+      });
+    } catch (err) {
       console.error("Erro na requisição:", err.message);
       toast.error(
         err.message || "Erro ao criar usuário, tente novamente mais tarde.",
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -80,69 +104,92 @@ const RegisterForm = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleRegister}>
-                <div className="flex flex-col gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="name">Nome</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      type="text"
-                      placeholder="Digite seu nome"
-                      required
-                      ref={nameRef}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">E-mail</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      required
-                      ref={emailRef}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <div className="flex items-center">
-                      <Label htmlFor="password">Senha</Label>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <div className="flex flex-col gap-6">
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nome</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                placeholder="Digite seu nome"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
+                          </FormItem>
+                        )}
+                      />
                     </div>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      required
-                      ref={passwordRef}
-                    />
+
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="email"
+                                placeholder="m@exemplo.com"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Senha</FormLabel>
+                            <FormControl>
+                              <Input type="password" {...field} />
+                            </FormControl>
+                            <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full gap-2"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <Image
+                            src="/loading2.svg"
+                            width={18}
+                            height={18}
+                            alt="loading"
+                          />
+                          Registrando
+                        </>
+                      ) : (
+                        "Registrar"
+                      )}
+                    </Button>
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full gap-2"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Image
-                          src="/loading2.svg"
-                          width={18}
-                          height={18}
-                          alt="loading"
-                        />
-                        Registrando
-                      </>
-                    ) : (
-                      "Registrar"
-                    )}
-                  </Button>
-                </div>
-                <div className="mt-4 text-center text-sm">
-                  Já Possui conta?{" "}
-                  <Link href="/" className="underline underline-offset-4">
-                    Fazer Login
-                  </Link>
-                </div>
-              </form>
+                  <div className="mt-4 text-center text-sm">
+                    Já Possui conta?{" "}
+                    <Link href="/" className="underline underline-offset-4">
+                      Fazer Login
+                    </Link>
+                  </div>
+                </form>
+              </Form>
             </CardContent>
           </Card>
         </div>
@@ -151,4 +198,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default RegisterForm2;

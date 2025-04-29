@@ -34,7 +34,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </AuthProvider>
-        <Toaster duration={6000} position="top-center" style={{}} />
+        <Toaster duration={2000} position="bottom-right" style={{}} />
       </body>
     </html>
   );
