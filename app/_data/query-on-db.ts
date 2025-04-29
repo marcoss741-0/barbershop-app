@@ -131,3 +131,39 @@ export const queryUser = async (email: string) => {
     },
   });
 };
+
+export const createBarbershops = async (
+  userId: string,
+  barbershopData: {
+    name: string;
+    address: string;
+    imageUrl: string;
+    phones: string[];
+    description: string;
+    services: {
+      name: string;
+      description: string;
+      price: number;
+      imageUrl: string;
+    }[];
+  },
+) => {
+  const session = await auth();
+  if (!session.user) throw new Error("Não é possível Criar a barbearia!");
+
+  return await db.barbershop.create({
+    data: {
+      name: barbershopData.name,
+      address: barbershopData.address,
+      imageUrl: barbershopData.imageUrl,
+      phones: barbershopData.phones,
+      description: barbershopData.description,
+      user: {
+        connect: { id: userId },
+      },
+      services: {
+        create: barbershopData.services,
+      },
+    },
+  });
+};
