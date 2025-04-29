@@ -64,7 +64,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
           className="justify-start gap-2"
           asChild
         >
-          <Link href={`/barbershops/manager/${user.email}`}>
+          <Link href={`/barbershops/manager`}>
             <Store />
             Minhas Barbearias
           </Link>

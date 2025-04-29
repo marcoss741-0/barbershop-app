@@ -116,3 +116,18 @@ export const queryAllBookings = async () => {
     },
   });
 };
+
+export const queryUser = async (email: string) => {
+  const session = await auth();
+  if (!session.user) {
+    throw new Error("Usuario não esta logado!");
+  }
+
+  return await db.user.findUnique({
+    where: { email },
+    include: {
+      barbershops: { include: { user: true } },
+      bookings: { include: { service: true } },
+    },
+  });
+};

@@ -4,6 +4,8 @@ import { SheetContent } from "./ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { SidebarInteractiveElements } from "./sidebar-interactive-elements";
 import { useEffect, useState } from "react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { DialogDescription, DialogTitle } from "./ui/dialog";
 
 interface UserData {
   user?: {
@@ -36,6 +38,10 @@ const SidebarSheet = () => {
   return (
     <>
       <SheetContent className="&[::-webkit-scrollbar]:hidden w-full overflow-y-auto">
+        <VisuallyHidden>
+          <DialogTitle>Menu</DialogTitle>
+          <DialogDescription>Barra de Menu Lateral</DialogDescription>
+        </VisuallyHidden>
         {user ? (
           <>
             <div className="flex items-center justify-start gap-2 border-b border-solid p-5 md:p-10">

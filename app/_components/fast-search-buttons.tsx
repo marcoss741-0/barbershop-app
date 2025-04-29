@@ -6,13 +6,14 @@ const FastSearch = () => {
   return (
     <>
       <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-        {ShortSearchOptions.map((options) => (
+        {ShortSearchOptions.map((options, index) => (
           <Link
+            key={index}
             href={`/barbershops?service=${options.title}`}
             className="w-full"
           >
             <Button className="cursor-pointer gap-2" variant="secondary">
-              <Image src={options.iconUrl} width={16} height={16} alt="corte" />
+              <Image src={options.iconUrl} alt="corte" width={16} height={16} />
               {options.title}
             </Button>
           </Link>
