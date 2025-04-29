@@ -125,10 +125,6 @@ export const queryUser = async (email: string) => {
 
   return await db.user.findUnique({
     where: { email },
-    include: {
-      barbershops: { include: { user: true } },
-      bookings: { include: { service: true } },
-    },
   });
 };
 

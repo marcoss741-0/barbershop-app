@@ -7,6 +7,7 @@ export const createUser = async (
   name: string,
   email: string,
   password: string,
+  imageUrl: string,
 ) => {
   try {
     const existingUser = await db.user.findUnique({
@@ -24,12 +25,13 @@ export const createUser = async (
         name,
         email,
         password: hashSync(password),
+        image: imageUrl,
       },
     });
 
-    return newUser; // Retorna o usuário criado
+    return newUser;
   } catch (error: any) {
     console.error("Erro ao criar usuário:", error.message);
-    throw new Error(error.message || "Erro ao criar usuário."); // Propaga o erro
+    throw new Error(error.message || "Erro ao criar usuário.");
   }
 };

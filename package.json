@@ -28,6 +28,7 @@
     "bcrypt-ts": "^6.0.0",
     "bcryptjs-react": "^2.4.6",
     "class-variance-authority": "^0.7.0",
+    "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.5.0",

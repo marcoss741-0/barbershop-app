@@ -18,7 +18,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   bookings      Booking[]
-  barbershops   Barbershop[] @relation("UserBarbershops")
+  Barbershops   Barbershop[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -69,11 +69,11 @@ model Barbershop {
   phones      String[]
   description String
   imageUrl    String
-  userId      String
-  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserBarbershops")
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
   services    BarbershopService[]
+  userId      String?
+  user        User?               @relation(fields: [userId], references: [id])
 }
 
 model BarbershopService {

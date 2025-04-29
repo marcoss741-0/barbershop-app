@@ -37,6 +37,9 @@ const schema = z.object({
     .string()
     .min(6, { message: "A senha deve ter no mínimo 6 caracteres" })
     .max(32, { message: "A senha deve ter no máximo 32 caracteres" }),
+  file: z.instanceof(File).refine((file) => file.size > 0, {
+    message: "Faça, upload da sua foto",
+  }),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -48,22 +51,26 @@ const RegisterForm2 = () => {
       email: "",
       name: "",
       password: "",
+      file: undefined,
     },
   });
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-    const { name, email, password } = data;
+    // console.log(data);
+    const { name, email, password, file } = data;
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("file", file);
 
     try {
       const response = await fetch("/api/users", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
+        body: formData,
+        // body: JSON.stringify({ name, email, password }),
       });
 
       if (!response.ok) {
@@ -82,6 +89,7 @@ const RegisterForm2 = () => {
         email: "",
         password: "",
         name: "",
+        file: undefined,
       });
     } catch (err) {
       console.error("Erro na requisição:", err.message);
@@ -156,6 +164,31 @@ const RegisterForm2 = () => {
                             <FormLabel>Senha</FormLabel>
                             <FormControl>
                               <Input type="password" {...field} />
+                            </FormControl>
+                            <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid items-center justify-center gap-2">
+                      <FormField
+                        control={form.control}
+                        name="file"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Foto de perfil</FormLabel>
+                            <FormControl>
+                              <input
+                                type="file"
+                                onChange={(e) =>
+                                  field.onChange(e.target.files?.[0])
+                                }
+                                ref={field.ref}
+                                name={field.name}
+                                disabled={field.disabled}
+                                className="w-full rounded-lg border border-solid p-3 text-xs"
+                              />
                             </FormControl>
                             <FormMessage className="min-h-[1.25rem] transition-all duration-200" />
                           </FormItem>
