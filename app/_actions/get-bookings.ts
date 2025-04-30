@@ -1,16 +1,15 @@
 "use server";
 
 import { endOfDay, startOfDay } from "date-fns";
-import db from "../_lib/prisma";
 import { unstable_cache } from "next/cache";
+import db from "../_lib/prisma";
 
 interface GetBookingsProps {
-  serviceId?: string;
   date: Date;
 }
 
-export const getBookings = ({ date }: GetBookingsProps) => {
-  return db.booking.findMany({
+export const getBookings = async ({ date }: GetBookingsProps) => {
+  return await db.booking.findMany({
     where: {
       date: {
         lte: endOfDay(date),

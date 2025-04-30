@@ -28,20 +28,20 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
 
             <Badge
               className="absolute left-2 top-2 space-x-1"
-              variant="secondary"
+              variant="default"
             >
-              <Star size={12} className="fill-primary text-primary" />
+              <Star size={12} className="fill-black text-black" />
               <p>5,0</p>
             </Badge>
           </div>
 
           <div className="px-1 py-3">
             <h3 className="truncate font-semibold">{barbershop.name}</h3>
-            <p className="truncate text-sm text-gray-400">
+            <p className="truncate text-sm font-medium text-card-foreground">
               {barbershop.address}
             </p>
             <Button
-              variant="secondary"
+              variant="outline"
               className="mt-3 w-full cursor-pointer"
               asChild
             >

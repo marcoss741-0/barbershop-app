@@ -4,13 +4,10 @@ import { Montserrat, Roboto_Slab } from "next/font/google";
 import { Toaster } from "./_components/ui/sonner";
 import Footer from "./_components/footer";
 import AuthProvider from "./_providers/auth";
+import { ThemeProvider } from "./_components/theme-provider";
+import { ModeToggle } from "./_components/toggle-theme";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
-
-// const robotoSlab = Roboto_Slab({
-//   subsets: ["latin"],
-//   weight: ["400", "700"],
-// });
 
 export const metadata: Metadata = {
   title: "Ômega Barber´s",
@@ -28,13 +25,20 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning className="dark">
       <body className={`${montserrat.className}`}>
-        <AuthProvider>
-          <div className="flex h-full flex-col">
-            <div className="flex-1"> {children}</div>
-            <Footer />
-          </div>
-        </AuthProvider>
-        <Toaster duration={2000} position="bottom-right" style={{}} />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <div className="flex h-full flex-col">
+              <div className="flex-1">{children}</div>
+              <Footer />
+            </div>
+          </AuthProvider>
+          <Toaster duration={2000} position="bottom-right" style={{}} />
+        </ThemeProvider>
       </body>
     </html>
   );

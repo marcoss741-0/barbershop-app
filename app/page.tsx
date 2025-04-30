@@ -15,10 +15,8 @@ import FastSearch from "./_components/fast-search-buttons";
 import { auth } from "./_lib/auth-option";
 
 const Home = async () => {
-  // Check if the user is authenticated
   const session = await auth();
 
-  // Fetch data from the database
   const babershops = await queryBarbershops();
   const popularBarbershop = await queryMostPopularBarber();
   const bookings = await queryBookings();
@@ -29,7 +27,7 @@ const Home = async () => {
         <Header />
 
         <div className="gap-1 px-5 py-6">
-          <h2 className="text-xl font-normal">
+          <h2 className="text-xl font-medium text-foreground">
             Olá,{" "}
             <span className="font-medium capitalize text-primary">
               {session?.user?.name
@@ -37,7 +35,7 @@ const Home = async () => {
                 : "Bem vindos!"}
             </span>
           </h2>
-          <p className="text-[14px] font-normal capitalize text-primary">
+          <p className="text-[14px] font-semibold capitalize text-secondary-foreground">
             {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
           </p>
 
@@ -59,36 +57,42 @@ const Home = async () => {
             />
           </div>
 
-          <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-[#838896]">
-              AGENDAMENTOS
-            </h3>
-            <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-              {bookings.length > 0 ? (
-                bookings.map(
-                  (
-                    booking: Prisma.BookingGetPayload<{
-                      include: { service: { include: { barbershop: true } } };
-                    }>,
-                  ) => (
-                    <BookingItem
-                      key={JSON.parse(JSON.stringify(booking.id))}
-                      booking={JSON.parse(JSON.stringify(booking))}
-                    />
-                  ),
-                )
-              ) : (
-                <div className="flex w-full items-center justify-center">
-                  <p className="text-sm text-gray-400">
-                    Você não tem agendamentos
-                  </p>
+          {session?.user && (
+            <>
+              <div className="mt-4 w-full items-center gap-2 space-y-4">
+                <h3 className="text-[16px] font-semibold text-foreground">
+                  AGENDAMENTOS
+                </h3>
+                <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                  {bookings.length > 0 ? (
+                    bookings.map(
+                      (
+                        booking: Prisma.BookingGetPayload<{
+                          include: {
+                            service: { include: { barbershop: true } };
+                          };
+                        }>,
+                      ) => (
+                        <BookingItem
+                          key={JSON.parse(JSON.stringify(booking.id))}
+                          booking={JSON.parse(JSON.stringify(booking))}
+                        />
+                      ),
+                    )
+                  ) : (
+                    <div className="flex w-full items-center justify-center">
+                      <p className="text-sm font-medium text-secondary-foreground">
+                        Você não tem agendamentos
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            </>
+          )}
 
           <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-[#838896]">
+            <h3 className="text-[16px] font-semibold text-foreground">
               RECOMENDADOS
             </h3>
 
@@ -100,7 +104,7 @@ const Home = async () => {
           </div>
 
           <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-[#838896]">
+            <h3 className="text-[16px] font-semibold text-foreground">
               POPULARES
             </h3>
 
