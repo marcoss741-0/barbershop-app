@@ -47,13 +47,13 @@ const Home = async () => {
               <FastSearch />
             </>
           }
-          <div className="relative mt-6 flex h-36 w-full items-center rounded-md">
+          <div className="relative mt-6 flex h-40 w-full items-center rounded-md">
             <Image
               fill
               priority
-              src="/banner2.svg"
+              src="/barbershop team-pana.svg"
               alt="Corte como os melhores da cidade!"
-              className="rounded-md object-cover"
+              className="rounded-md object-cover object-top"
             />
           </div>
 
