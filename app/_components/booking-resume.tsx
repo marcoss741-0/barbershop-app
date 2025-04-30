@@ -16,7 +16,7 @@ const BookingSummary = ({
 }: BookingSummaryProps) => {
   return (
     <Card>
-      <CardContent className="space-y-3 p-3">
+      <CardContent className="space-y-3 p-3 font-medium">
         <div className="flex items-center justify-between">
           <h2 className="font-bold">{service.name}</h2>
           <p className="text-sm font-bold">
@@ -28,7 +28,7 @@ const BookingSummary = ({
         </div>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-sm text-gray-400">Data</h2>
+          <h2 className="text-sm text-foreground">Data</h2>
           <p className="text-sm">
             {format(selectedDate, "d 'de' MMMM", {
               locale: ptBR,
@@ -37,12 +37,12 @@ const BookingSummary = ({
         </div>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-sm text-gray-400">Horário</h2>
+          <h2 className="text-sm text-foreground">Horário</h2>
           <p className="text-sm">{format(selectedDate, "HH:mm")}</p>
         </div>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-sm text-gray-400">Barbearia</h2>
+          <h2 className="text-sm text-foreground">Barbearia</h2>
           <p className="text-sm">{barbershop.name}</p>
         </div>
       </CardContent>

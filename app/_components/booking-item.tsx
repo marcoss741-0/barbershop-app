@@ -116,7 +116,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             />
 
             <div className="flex flex-col gap-3 p-5">
-              <h2 className="text-sm font-normal text-gray-400">CONTATO</h2>
+              <h2 className="text-sm font-medium text-foreground">CONTATO</h2>
               {barbershop.phones.map((phone, index) => (
                 <PhoneItem key={index} phone={phone} />
               ))}
@@ -126,7 +126,10 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           <SheetFooter className="mb-5 px-4">
             <div className="flex w-full flex-wrap justify-between gap-3">
               <SheetClose asChild>
-                <Button variant="outline" className="w-full sm:w-auto">
+                <Button
+                  variant="secondary"
+                  className="w-full border border-foreground sm:w-auto"
+                >
                   Voltar
                 </Button>
               </SheetClose>

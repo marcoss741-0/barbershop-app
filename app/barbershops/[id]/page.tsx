@@ -73,12 +73,12 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </div>
 
         <div className="flex flex-col gap-3 border-b border-solid p-5">
-          <h2 className="text-sm font-normal text-gray-400">SOBRE NÓS</h2>
+          <h2 className="text-sm font-medium text-foreground">SOBRE NÓS</h2>
           <p className="text-sm">{barbershop.description}</p>
         </div>
 
         <div className="flex flex-col gap-3 border-b border-solid p-5">
-          <h2 className="text-sm font-normal text-gray-400">SERVIÇOS</h2>
+          <h2 className="text-sm font-medium text-foreground">SERVIÇOS</h2>
 
           {barbershop.services.map((service) => (
             <ServiceItem
@@ -90,7 +90,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </div>
 
         <div className="flex flex-col gap-3 border-b border-solid p-5">
-          <h2 className="text-sm font-normal text-gray-400">CONTATO</h2>
+          <h2 className="text-sm font-medium text-foreground">CONTATO</h2>
 
           {barbershop.phones.map((phone) => (
             <PhoneItem phone={phone} />

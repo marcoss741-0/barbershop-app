@@ -179,7 +179,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
     <>
       {/* Card do serviço */}
       <Card className="w-full py-1">
-        <CardContent className="flex w-full items-center justify-between gap-3 px-2">
+        <CardContent className="flex w-full items-center justify-between gap-3 px-2 font-medium text-foreground">
           <div className="relative max-h-28 min-h-28 min-w-28 max-w-28">
             <Image
               className="rounded-lg object-cover"
@@ -191,15 +191,16 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
           </div>
           <div className="flex flex-col gap-1 p-2">
             <h1 className="mb-2 text-sm font-semibold">{jsonService.name}</h1>
-            <p className="text-xs text-gray-400">{jsonService.description}</p>
+            <p className="text-xs">{jsonService.description}</p>
 
             <div className="flex items-center justify-between">
               <p className="font-semibold text-primary">
                 {formatCurrencyBRL(Number(jsonService.price))}
               </p>
               <Button
-                variant="secondary"
+                variant="default"
                 size="sm"
+                className="border"
                 onClick={handleBookingClick}
               >
                 Reservar
@@ -221,13 +222,14 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
             </SheetTitle>
           </SheetHeader>
 
-          <div className="border-b border-solid py-5">
+          <div className="border-b border-solid py-5 font-medium text-foreground">
             <Calendar
               mode="single"
               locale={ptBR}
               selected={selectedDay}
               onSelect={handleDateSelect}
               fromDate={new Date()}
+              className="font-medium"
               styles={{
                 head_cell: {
                   width: "100%",
@@ -269,7 +271,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
                   </Button>
                 ))
               ) : (
-                <p className="text-center text-sm text-gray-400">
+                <p className="text-center text-sm text-foreground">
                   Nenhum horário disponível para o dia selecionado.
                 </p>
               )}
@@ -290,7 +292,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
             <Button
               onClick={handleCreatingBooking}
               disabled={!selectedDate}
-              className="w-full sm:w-auto"
+              className="w-full font-semibold text-foreground sm:w-auto"
             >
               Confirmar
             </Button>

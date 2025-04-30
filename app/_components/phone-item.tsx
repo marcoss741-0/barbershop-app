@@ -1,6 +1,6 @@
 "use client";
 
-import { SmartphoneIcon } from "lucide-react";
+import { ClipboardList, SmartphoneIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 
@@ -18,13 +18,15 @@ const PhoneItem = ({ phone }: PhoneItemProps) => {
       <div key={phone} className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SmartphoneIcon width={24} height={24} />
-          <p className="text-sm">{phone}</p>
+          <p className="text-sm font-medium text-foreground">{phone}</p>
         </div>
         <Button
           size="sm"
-          variant="outline"
+          variant="secondary"
+          className="items-center gap-1 border"
           onClick={() => handleCopyPhoneButton(phone)}
         >
+          <ClipboardList size={16} />
           Copiar
         </Button>
       </div>

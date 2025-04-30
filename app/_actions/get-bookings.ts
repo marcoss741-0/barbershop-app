@@ -6,15 +6,17 @@ import db from "../_lib/prisma";
 
 interface GetBookingsProps {
   date: Date;
+  serviceId?: string;
 }
 
-export const getBookings = async ({ date }: GetBookingsProps) => {
-  return await db.booking.findMany({
+export const getBookings = ({ date, serviceId }: GetBookingsProps) => {
+  return db.booking.findMany({
     where: {
       date: {
         lte: endOfDay(date),
         gte: startOfDay(date),
       },
+      ...(serviceId && { serviceId }),
     },
   });
 };
