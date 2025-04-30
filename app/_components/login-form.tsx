@@ -25,7 +25,6 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { useRouter } from "next/navigation";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
@@ -57,8 +56,6 @@ export function LoginForm({
       password: "",
     },
   });
-
-  const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
     const { email, password } = data;
@@ -96,7 +93,7 @@ export function LoginForm({
             <div className="flex flex-col gap-4">
               <Button
                 variant="secondary"
-                className="w-full gap-2"
+                className="w-full gap-2 border"
                 onClick={loginWithGoogle}
               >
                 {!isGoogleLoading ? (
@@ -108,7 +105,7 @@ export function LoginForm({
                   />
                 ) : (
                   <Image
-                    src="/loading.svg"
+                    src="/loading2.svg"
                     width={20}
                     height={20}
                     alt="is loading"
@@ -137,6 +134,7 @@ export function LoginForm({
                             <Input
                               type="text"
                               placeholder="m@exemplo.com"
+                              className="font-medium"
                               {...field}
                             />
                           </FormControl>
@@ -156,6 +154,7 @@ export function LoginForm({
                             <Input
                               type="password"
                               placeholder="********"
+                              className="font-medium"
                               {...field}
                             />
                           </FormControl>
@@ -186,7 +185,7 @@ export function LoginForm({
                 </div>
               </form>
             </Form>
-            <div className="text-center text-sm">
+            <div className="text-center text-sm font-medium text-foreground">
               Não tem uma conta?{" "}
               <Link href="/users" className="underline underline-offset-4">
                 Inscreva-se

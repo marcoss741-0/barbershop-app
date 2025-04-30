@@ -6,7 +6,7 @@ const Footer = () => {
       <footer>
         <Card className="rounded-none">
           <CardContent>
-            <p>
+            <p className="font-medium text-foreground">
               {" "}
               &copy; 2025 Copyright.{" "}
               <span className="font-semibold">Ômega Barbers.</span>

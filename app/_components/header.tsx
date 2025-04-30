@@ -4,20 +4,22 @@ import { Button } from "./ui/button";
 import { Sheet, SheetTrigger } from "./ui/sheet";
 import SidebarSheet from "./sidebar-sheet";
 import Link from "next/link";
+import { ModeToggle } from "./toggle-theme";
 
 const Header = () => {
   return (
     <>
       <Card className="rounded-none">
         <CardContent className="flex items-center justify-between gap-2">
-          <div className="flex items-center justify-start gap-2">
+          <div className="flex items-center justify-between gap-2">
             <Link href="/" className="flex gap-2">
               <ScissorsIcon className="h-8 w-8 font-bold text-primary" />
-              <h1 className="text-[20px] font-semibold text-gray-100">
+              <h1 className="text-[20px] font-semibold text-foreground">
                 ÔMEGA BARBER´S
               </h1>
             </Link>
           </div>
+          <ModeToggle />
           <div>
             <Sheet>
               <SheetTrigger asChild>

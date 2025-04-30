@@ -110,7 +110,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
         />
       </div>
       <SheetClose>
-        <Button variant="secondary" className="gap-2">
+        <Button variant="secondary" className="gap-2 border font-semibold">
           <SquareArrowDownLeft size={18} />
           Voltar
         </Button>

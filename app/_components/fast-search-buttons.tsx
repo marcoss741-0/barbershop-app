@@ -12,7 +12,7 @@ const FastSearch = () => {
             href={`/barbershops?service=${options.title}`}
             className="w-full"
           >
-            <Button className="cursor-pointer gap-2" variant="secondary">
+            <Button className="cursor-pointer gap-2" variant="default">
               <Image src={options.iconUrl} alt="corte" width={16} height={16} />
               {options.title}
             </Button>

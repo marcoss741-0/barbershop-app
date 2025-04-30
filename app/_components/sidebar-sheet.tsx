@@ -37,7 +37,10 @@ const SidebarSheet = () => {
 
   return (
     <>
-      <SheetContent className="&[::-webkit-scrollbar]:hidden w-full overflow-y-auto">
+      <SheetContent
+        side="right"
+        className="&[::-webkit-scrollbar]:hidden w-[90%] overflow-y-auto"
+      >
         <VisuallyHidden>
           <DialogTitle>Menu</DialogTitle>
           <DialogDescription>Barra de Menu Lateral</DialogDescription>
