@@ -9,7 +9,7 @@ interface GetBookingsProps {
   serviceId?: string;
 }
 
-export const getBookings = ({ date, serviceId }: GetBookingsProps) => {
+export const getBookings = async ({ date, serviceId }: GetBookingsProps) => {
   return db.booking.findMany({
     where: {
       date: {

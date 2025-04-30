@@ -14,8 +14,8 @@ import Link from "next/link";
 import { LoginForm } from "./login-form";
 import { toast } from "sonner";
 import { useTransition } from "react";
-import { initUser, offUser } from "../users/_actions/manager-session";
 import { useRouter } from "next/navigation";
+import { signIn, signOut } from "../_lib/auth-client";
 
 export const SidebarInteractiveElements = ({ user }: { user: any }) => {
   const [isGoogleLoading, startTransition] = useTransition();
@@ -24,7 +24,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
   const handleLoginWithGoogle = () => {
     try {
       startTransition(async () => {
-        await initUser();
+        await signIn("google");
         toast.success("Login realizado!");
       });
     } catch (error) {
@@ -33,12 +33,9 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
   };
 
   const handleLogout = async () => {
-    await offUser().then(() => {
-      window.location.reload();
-    });
-    setTimeout(() => {
+    await signOut().then(() => {
       router.push("/");
-    }, 1000);
+    });
   };
 
   return user ? (

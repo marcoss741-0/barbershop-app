@@ -12,7 +12,7 @@ import {
 } from "./ui/card";
 import { Input } from "./ui/input";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn } from "../_lib/auth-client";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -25,6 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { SignInResponse } from "next-auth/react";
 
 interface LoginFormProps {
   loginWithGoogle: () => void;
@@ -61,18 +62,21 @@ export function LoginForm({
     const { email, password } = data;
 
     try {
-      const response = await signIn("credentials", {
+      const response = (await signIn("credentials", {
         redirect: false,
         email,
         password,
-      });
-      if (response?.ok) {
-        toast.success("Login realizado com sucesso!");
+      })) as unknown as SignInResponse | undefined;
+      let { code, error, ok, status } = response;
+
+      console.log(code, error, ok, status);
+
+      if (error == "CredentialsSignin" && code == "credentials") {
+        toast.error("Credenciais inválidas. Por favor, tente novamente.");
+        return null;
+      } else {
+        toast.success("Login Efetuado com sucesso!");
         window.location.reload();
-      }
-      if (response.error == "CredentialsSignin") {
-        toast.error("Email ou senha incorretos. Por favor, tente novamente.");
-        return;
       }
     } catch (error) {
       toast.error(

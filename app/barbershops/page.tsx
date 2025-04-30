@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import BarbershopItem from "../_components/barbershop-item";
 import Header from "../_components/header";
 import SearchInput from "../_components/search";
@@ -5,17 +6,22 @@ import { queryBarbershopServiceByName } from "../_data/query-on-db";
 import FastSearch from "../_components/fast-search-buttons";
 
 interface BarbershopsPageProps {
+  params: Record<string, string>; // Certifique-se de que params seja um objeto síncrono
   searchParams: {
     title?: string;
     service?: string;
   };
 }
 
-const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
+const BarbershopsPage = async ({
+  params,
+  searchParams,
+}: BarbershopsPageProps) => {
   const barbershops = await queryBarbershopServiceByName(
     searchParams.service ?? "",
     searchParams.title ?? "",
   );
+
   return (
     <>
       <div>
