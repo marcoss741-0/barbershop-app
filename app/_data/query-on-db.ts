@@ -176,7 +176,7 @@ export const countBookingsByUserBarbershops = async (userId: string) => {
   return bookingCount;
 };
 
-export const createBarbershops = async (
+export const createBarbershop = async (
   userId: string,
   barbershopData: {
     name: string;
@@ -192,9 +192,16 @@ export const createBarbershops = async (
     }[];
   },
 ) => {
-  const session = await auth();
-  if (!session.user) throw new Error("Não é possível Criar a barbearia!");
+  // Verifica se o usuário já possui uma barbearia
+  const existingBarbershop = await db.barbershop.findUnique({
+    where: { userId },
+  });
 
+  if (existingBarbershop) {
+    throw new Error("O usuário já possui uma barbearia.");
+  }
+
+  // Cria a barbearia
   return await db.barbershop.create({
     data: {
       name: barbershopData.name,
