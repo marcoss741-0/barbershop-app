@@ -134,36 +134,6 @@ export const queryBarbershopByUser = async (userId?: string) => {
     return null;
   }
 
-  // const userData = await db.user.findUnique({
-  //   where: {
-  //     id: userId,
-  //   },
-  //   include: {
-  //     bookings: {
-  //       include: {
-  //         service: {
-  //           include: {
-  //             barbershop: true,
-  //           },
-  //         },
-  //       },
-  //     },
-  //     Barbershops: {
-  //       include: {
-  //         services: {
-  //           include: {
-  //             bookings: {
-  //               include: {
-  //                 user: true,
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
-
   const bookings = await db.booking.findMany({
     where: {
       service: {
@@ -190,7 +160,6 @@ export const queryBarbershopByUser = async (userId?: string) => {
 
 export const countBookingsByUserBarbershops = async (userId: string) => {
   if (!userId) {
-    // Retorna null ou lança um erro, dependendo do comportamento desejado
     return null;
   }
 
