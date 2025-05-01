@@ -44,7 +44,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
         <SheetClose asChild>
           <Button
             size="lg"
-            className="justify-start gap-2"
+            className="justify-start gap-2 border"
             variant="ghost"
             asChild
           >
@@ -58,7 +58,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
         <Button
           variant="ghost"
           size="lg"
-          className="justify-start gap-2"
+          className="justify-start gap-2 border"
           asChild
         >
           <Link href={`/barbershops/manager`}>
@@ -70,7 +70,7 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
         <Button
           variant="ghost"
           size="lg"
-          className="justify-start gap-2"
+          className="justify-start gap-2 border"
           asChild
         >
           <Link href={"/bookings"}>
@@ -80,17 +80,17 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
         </Button>
       </div>
 
-      <div className="flex w-full items-center justify-start gap-2 py-5">
+      <SheetClose className="mt-auto flex w-full items-center justify-start gap-2 py-5">
         <Button
           size="default"
-          variant="ghost"
+          variant="destructive"
           className="w-full justify-start gap-2 p-3"
           onClick={handleLogout}
         >
           <LogOutIcon />
           <p className="text-sm">Sair da Conta</p>
         </Button>
-      </div>
+      </SheetClose>
     </>
   ) : (
     <div className="flex flex-col items-center justify-center gap-6 md:p-10">

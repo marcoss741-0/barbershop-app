@@ -39,7 +39,7 @@ const SidebarSheet = () => {
     <>
       <SheetContent
         side="right"
-        className="&[::-webkit-scrollbar]:hidden w-[90%] overflow-y-auto"
+        className="&[::-webkit-scrollbar]:hidden mx-auto flex max-h-screen w-[90%] flex-col overflow-y-auto"
       >
         <VisuallyHidden>
           <DialogTitle>Menu</DialogTitle>
@@ -53,7 +53,9 @@ const SidebarSheet = () => {
                   src={image == null ? "/perfil.png" : image}
                   className="h-10 w-10"
                 />
-                <AvatarFallback>{name?.split(" ", 1) || ""}</AvatarFallback>
+                <AvatarFallback>
+                  {name?.split(" ", 1).slice(0, 3) || ""}
+                </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <p className="text-[16px] font-bold">{name}</p>

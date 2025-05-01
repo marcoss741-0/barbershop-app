@@ -47,48 +47,46 @@ const Home = async () => {
               <FastSearch />
             </>
           }
-          <div className="relative mt-6 flex h-40 w-full items-center rounded-md">
+          <div className="relative mt-6 flex h-40 w-full items-center rounded-md lg:h-80">
             <Image
               fill
               priority
               src="/barbershop team-pana.svg"
               alt="Corte como os melhores da cidade!"
-              className="rounded-md object-cover object-top"
+              className="rounded-md object-cover object-top lg:object-contain lg:object-top"
             />
           </div>
 
           {session?.user && (
-            <>
-              <div className="mt-4 w-full items-center gap-2 space-y-4">
-                <h3 className="text-[16px] font-semibold text-foreground">
-                  AGENDAMENTOS
-                </h3>
-                <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                  {bookings.length > 0 ? (
-                    bookings.map(
-                      (
-                        booking: Prisma.BookingGetPayload<{
-                          include: {
-                            service: { include: { barbershop: true } };
-                          };
-                        }>,
-                      ) => (
-                        <BookingItem
-                          key={JSON.parse(JSON.stringify(booking.id))}
-                          booking={JSON.parse(JSON.stringify(booking))}
-                        />
-                      ),
-                    )
-                  ) : (
-                    <div className="flex w-full items-center justify-center">
-                      <p className="text-sm font-medium text-secondary-foreground">
-                        Você não tem agendamentos
-                      </p>
-                    </div>
-                  )}
-                </div>
+            <div className="mt-4 w-full items-center gap-2 space-y-4">
+              <h3 className="text-[16px] font-semibold text-foreground">
+                AGENDAMENTOS
+              </h3>
+              <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                {bookings.length > 0 ? (
+                  bookings.map(
+                    (
+                      booking: Prisma.BookingGetPayload<{
+                        include: {
+                          service: { include: { barbershop: true } };
+                        };
+                      }>,
+                    ) => (
+                      <BookingItem
+                        key={JSON.parse(JSON.stringify(booking.id))}
+                        booking={JSON.parse(JSON.stringify(booking))}
+                      />
+                    ),
+                  )
+                ) : (
+                  <div className="flex w-full items-center justify-center">
+                    <p className="text-sm font-medium text-secondary-foreground">
+                      Você não tem agendamentos
+                    </p>
+                  </div>
+                )}
               </div>
-            </>
+            </div>
           )}
 
           <div className="mt-4 w-full items-center gap-2 space-y-4">
@@ -114,6 +112,8 @@ const Home = async () => {
               ))}
             </div>
           </div>
+
+          {/* stay here */}
         </div>
       </div>
     </>
