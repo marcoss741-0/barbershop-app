@@ -16,6 +16,14 @@ import { toast } from "sonner";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "../_lib/auth-client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Input } from "./ui/input";
 
 export const SidebarInteractiveElements = ({ user }: { user: any }) => {
   const [isGoogleLoading, startTransition] = useTransition();
@@ -79,6 +87,28 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
           </Link>
         </Button>
       </div>
+
+      {/* <Card className="shadow-none">
+        <form>
+          <CardHeader className="p-4 pb-0">
+            <CardTitle className="text-sm">
+              Subscribe to our newsletter
+            </CardTitle>
+            <CardDescription>
+              Opt-in to receive updates and news about the sidebar.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-2.5 p-4">
+            <Input type="email" placeholder="Email" />
+            <Button
+              className="bg-sidebar-primary text-sidebar-primary-foreground w-full shadow-none"
+              size="sm"
+            >
+              Subscribe
+            </Button>
+          </CardContent>
+        </form>
+      </Card> */}
 
       <SheetClose className="mt-auto flex w-full items-center justify-start gap-2 py-5">
         <Button
