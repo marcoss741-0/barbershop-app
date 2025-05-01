@@ -128,6 +128,85 @@ export const queryUser = async (email: string) => {
   });
 };
 
+export const queryBarbershopByUser = async (userId?: string) => {
+  if (!userId) {
+    // Retorna null ou lança um erro, dependendo do comportamento desejado
+    return null;
+  }
+
+  // const userData = await db.user.findUnique({
+  //   where: {
+  //     id: userId,
+  //   },
+  //   include: {
+  //     bookings: {
+  //       include: {
+  //         service: {
+  //           include: {
+  //             barbershop: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //     Barbershops: {
+  //       include: {
+  //         services: {
+  //           include: {
+  //             bookings: {
+  //               include: {
+  //                 user: true,
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+
+  const bookings = await db.booking.findMany({
+    where: {
+      service: {
+        barbershop: {
+          userId: userId, // Relaciona as barbearias ao usuário
+        },
+      },
+    },
+    include: {
+      user: true, // Inclui informações do usuário que fez o agendamento
+      service: {
+        include: {
+          barbershop: true, // Inclui informações da barbearia
+        },
+      },
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
+  return bookings;
+};
+
+export const countBookingsByUserBarbershops = async (userId: string) => {
+  if (!userId) {
+    // Retorna null ou lança um erro, dependendo do comportamento desejado
+    return null;
+  }
+
+  const bookingCount = await db.booking.count({
+    where: {
+      service: {
+        barbershop: {
+          userId,
+        },
+      },
+    },
+  });
+
+  return bookingCount;
+};
+
 export const createBarbershops = async (
   userId: string,
   barbershopData: {

@@ -7,12 +7,25 @@ import { Prisma } from "@prisma/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
+  countBookingsByUserBarbershops,
+  queryBarbershopByUser,
   queryBarbershops,
   queryBookings,
   queryMostPopularBarber,
 } from "./_data/query-on-db";
 import FastSearch from "./_components/fast-search-buttons";
 import { auth } from "./_lib/auth-option";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./_components/ui/card";
+import { BellRing, Check } from "lucide-react";
+import { Button } from "@/app/_components/ui/button";
+import { Switch } from "./_components/ui/switch";
 
 const Home = async () => {
   const session = await auth();
@@ -20,6 +33,10 @@ const Home = async () => {
   const babershops = await queryBarbershops();
   const popularBarbershop = await queryMostPopularBarber();
   const bookings = await queryBookings();
+  const userData = await queryBarbershopByUser(session?.user?.id);
+  const countBookingByBarbershopUser = await countBookingsByUserBarbershops(
+    session?.user?.id,
+  );
 
   return (
     <>
@@ -56,6 +73,53 @@ const Home = async () => {
               className="rounded-md object-cover object-top lg:object-contain lg:object-top"
             />
           </div>
+
+          {session?.user && (
+            <>
+              <div className="mt-4 w-full items-center gap-2 space-y-4">
+                <h3 className="text-[16px] font-semibold text-foreground">
+                  DASBOARD
+                </h3>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold">
+                      AGENDAMENTOS
+                    </CardTitle>
+                    <CardDescription className="text-[16px] text-foreground">
+                      Sua Barbearia possui{" "}
+                      <span className="font-bold">
+                        {countBookingByBarbershopUser}
+                      </span>{" "}
+                      agendamentos.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4">
+                    <div className="space-y-4">
+                      {userData.map((book) => (
+                        <div className="flex items-center space-x-4 rounded-md border p-4">
+                          <BellRing />
+                          <div className="flex-1 space-y-1">
+                            <p className="text-sm font-medium leading-none">
+                              {book.user.name}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {book.service.name}
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full">
+                      <Check /> Mark all as read
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </>
+          )}
 
           {session?.user && (
             <div className="mt-4 w-full items-center gap-2 space-y-4">

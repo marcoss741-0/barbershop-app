@@ -15,7 +15,7 @@ import {
 import { Calendar } from "./ui/calendar";
 import { ptBR } from "date-fns/locale";
 import { useEffect, useMemo, useState } from "react";
-import { format, set } from "date-fns";
+import { format, isPast, isToday, set } from "date-fns";
 import { Pick } from "@prisma/client/runtime/library";
 import { toast } from "sonner";
 import creatingBooking from "../_actions/creating-booking";
@@ -55,6 +55,33 @@ const TIME_LIST = [
   "18:00",
 ];
 
+interface GetTimeListProps {
+  bookings: Booking[];
+  selectedDay: Date;
+}
+
+const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
+  return TIME_LIST.filter((time) => {
+    const hour = Number(time.split(":")[0]);
+    const minutes = Number(time.split(":")[1]);
+
+    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }));
+    if (timeIsOnThePast && isToday(selectedDay)) {
+      return false;
+    }
+
+    const hasBookingOnCurrentTime = bookings.some(
+      (booking) =>
+        booking.date.getHours() === hour &&
+        booking.date.getMinutes() === minutes,
+    );
+    if (hasBookingOnCurrentTime) {
+      return false;
+    }
+    return true;
+  });
+};
+
 const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
@@ -66,29 +93,6 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
   const { data } = useSession();
   const router = useRouter();
-
-  const getTimeList = (bookings: Booking[]) => {
-    const now = new Date(); // Data e hora atual
-
-    return TIME_LIST.filter((time) => {
-      const [hour, minute] = time.split(":").map(Number);
-      const currentTime = new Date(selectedDay || now); // Use o dia selecionado ou o dia atual
-      currentTime.setHours(hour, minute, 0, 0);
-
-      // Verifica se o horário já passou
-      if (currentTime < now) {
-        return false;
-      }
-
-      // Verifica se o horário já está reservado
-      const hasBookingInCurrentTime = bookings.some(
-        (booking) =>
-          booking.date.getHours() === hour &&
-          booking.date.getMinutes() === minute,
-      );
-      return !hasBookingInCurrentTime;
-    });
-  };
 
   //converted the service to json and then parsed it again to avoid the serialization error
   const jsonService = JSON.parse(JSON.stringify(service));
@@ -175,6 +179,13 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
     );
   };
 
+  const timeList = useMemo(() => {
+    if (!selectedDay) return [];
+    return getTimeList({
+      bookings: dayBookings,
+      selectedDay,
+    });
+  }, [dayBookings, selectedDay]);
   return (
     <>
       {/* Card do serviço */}
@@ -258,8 +269,8 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
           {selectedDay && (
             <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
-              {getTimeList(dayBookings).length > 0 ? (
-                getTimeList(dayBookings).map((hour, index) => (
+              {timeList.length > 0 ? (
+                timeList.map((hour, index) => (
                   <Button
                     key={index}
                     className="rounded-full"
