@@ -164,7 +164,7 @@ export const queryBarbershopByUser = async (userId?: string) => {
       id: true,
     },
     orderBy: {
-      date: "desc",
+      date: "asc",
     },
   });
 
@@ -206,7 +206,7 @@ export const userHasBarbershop = async (userId: string) => {
     },
   });
 
-  return !!hasBarbershops;
+  return hasBarbershops;
 };
 
 export const availableServices = async () => {

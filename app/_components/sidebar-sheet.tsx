@@ -16,9 +16,11 @@ interface UserData {
 }
 
 const SidebarSheet = () => {
+  const [mounted, setMounted] = useState(false);
   const [userData, setUserData] = useState<UserData>({});
 
   useEffect(() => {
+    setMounted(true);
     const fetchUserData = async () => {
       try {
         const response = await fetch("/api/auth/session");
@@ -34,6 +36,10 @@ const SidebarSheet = () => {
 
   const user = userData?.user ?? null;
   const { image, name, email } = user || {};
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <>

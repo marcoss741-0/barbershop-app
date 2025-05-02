@@ -140,7 +140,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
       await creatingBooking({
         date: selectedDate,
         barbershopServiceId: service.id,
-        barbershopId: barbershop.id
+        barbershopId: barbershop.id,
       });
 
       toast("Agendamento realizado!", {
@@ -304,7 +304,7 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
             <Button
               onClick={handleCreatingBooking}
               disabled={!selectedDate}
-              className="w-full font-semibold text-foreground sm:w-auto"
+              className="w-full font-semibold sm:w-auto"
             >
               Confirmar
             </Button>

@@ -2,22 +2,24 @@
 
 import CreateBarbershopForm from "./create-barbershop-form";
 import {
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-} from "./ui/drawer";
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
+import { SheetDescription, SheetHeader, SheetTitle } from "./ui/sheet";
 
 const RegisterBarbershops = () => {
   return (
     <>
-      <DrawerHeader>
-        <DrawerTitle>Cadastrar Loja</DrawerTitle>
-        <DrawerDescription className="font-medium text-foreground">
+      <SheetHeader className="p-3">
+        <SheetTitle>Cadastrar Loja</SheetTitle>
+        <SheetDescription className="font-medium text-foreground">
           Insira os dados da sua barbearia bem como os serviços prestados.
-        </DrawerDescription>
-      </DrawerHeader>
-
+        </SheetDescription>
+      </SheetHeader>
       <CreateBarbershopForm onSubmit={() => {}} />
     </>
   );

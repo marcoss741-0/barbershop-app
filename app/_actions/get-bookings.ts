@@ -16,7 +16,7 @@ export const getBookings = async ({ date, serviceId }: GetBookingsProps) => {
         lte: endOfDay(date),
         gte: startOfDay(date),
       },
-      ...(serviceId && { serviceId }),
+      ...(serviceId && { barbershopServiceId: serviceId }),
     },
   });
 };

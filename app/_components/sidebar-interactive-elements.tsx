@@ -13,7 +13,7 @@ import { SheetClose } from "./ui/sheet";
 import Link from "next/link";
 import { LoginForm } from "./login-form";
 import { toast } from "sonner";
-import { useTransition } from "react";
+import { useTransition, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "../_lib/auth-client";
 import {
@@ -26,8 +26,13 @@ import {
 import { Input } from "./ui/input";
 
 export const SidebarInteractiveElements = ({ user }: { user: any }) => {
+  const [mounted, setMounted] = useState(false);
   const [isGoogleLoading, startTransition] = useTransition();
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLoginWithGoogle = () => {
     try {
@@ -45,6 +50,10 @@ export const SidebarInteractiveElements = ({ user }: { user: any }) => {
       router.push("/");
     });
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return user ? (
     <>

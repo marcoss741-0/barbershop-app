@@ -3,7 +3,6 @@ import Image from "next/image";
 import BarbershopItem from "./_components/barbershop-item";
 import BookingItem from "./_components/booking-item";
 import SearchInput from "./_components/search";
-import { Prisma } from "@prisma/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -24,15 +23,14 @@ import {
   CardHeader,
   CardTitle,
 } from "./_components/ui/card";
-import { BellRing, Check } from "lucide-react";
+import { BellRing, Check, Terminal } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { Switch } from "./_components/ui/switch";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-} from "./_components/ui/drawer";
 import RegisterBarbershops from "./_components/drawer-register-barbershops";
+import { Sheet, SheetContent, SheetTrigger } from "./_components/ui/sheet";
+import { Alert, AlertDescription, AlertTitle } from "./_components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "./_components/ui/avatar";
+import { DatePicker } from "./_components/update-date-booking";
 
 const Home = async () => {
   const session = await auth();
@@ -40,11 +38,14 @@ const Home = async () => {
   const babershops = await queryBarbershops();
   const popularBarbershop = await queryMostPopularBarber();
   const bookings = await queryBookings();
-  const userData = await queryBarbershopByUser(session?.user?.id);
+  const userData = (await queryBarbershopByUser(session?.user?.id)) ?? [];
   const countBookingByBarbershopUser = await countBookingsByUserBarbershops(
     session?.user?.id,
   );
   const hasBarbershops = await userHasBarbershop(session?.user?.id);
+
+  const invalidBookings = userData.filter((book) => book.date < new Date());
+  const validBookings = userData.filter((book) => book.date >= new Date());
 
   return (
     <>
@@ -105,16 +106,19 @@ const Home = async () => {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <Drawer>
-                          <DrawerTrigger asChild>
+                        <Sheet>
+                          <SheetTrigger asChild>
                             <Button className="w-full cursor-pointer p-3 text-lg font-medium">
                               Começar
                             </Button>
-                          </DrawerTrigger>
-                          <DrawerContent>
+                          </SheetTrigger>
+                          <SheetContent
+                            side="left"
+                            className="w-[90%] overflow-y-auto"
+                          >
                             <RegisterBarbershops />
-                          </DrawerContent>
-                        </Drawer>
+                          </SheetContent>
+                        </Sheet>
                       </CardContent>
                     </Card>
                   </>
@@ -123,21 +127,29 @@ const Home = async () => {
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-lg font-semibold">
-                          AGENDAMENTOS
+                          Clientes Agendados
                         </CardTitle>
                         <CardDescription className="text-[16px] text-foreground">
-                          Sua Barbearia possui{" "}
+                          A sua{" "}
+                          <span className="font-bold text-primary">
+                            {hasBarbershops.name}
+                          </span>{" "}
+                          possui{" "}
                           <span className="font-bold">
                             {countBookingByBarbershopUser}
                           </span>{" "}
                           agendamentos.
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="flex flex-col gap-4">
+                      <CardContent className="flex h-[260px] flex-col gap-4 overflow-y-auto [&::-webkit-scrollbar]:hidden">
                         <div className="space-y-4">
-                          {userData.map((book) => (
-                            <div className="flex items-center space-x-4 rounded-md border p-4">
-                              <BellRing />
+                          {validBookings.map((book) => (
+                            <div className="flex items-center justify-between space-x-4 rounded-md border p-4">
+                              <Avatar>
+                                <AvatarImage
+                                  src={book.user.image || "/perfil.png"}
+                                />
+                              </Avatar>
                               <div className="flex-1 space-y-1">
                                 <p className="text-sm font-medium leading-none">
                                   {book.user.name}
@@ -146,8 +158,56 @@ const Home = async () => {
                                   {book.barbershopService.name}
                                 </p>
                               </div>
+                              <div>
+                                <p className="text-xs">
+                                  {format(book.date, "d 'de' MMMM", {
+                                    locale: ptBR,
+                                  })}
+                                  <span className="block">
+                                    {format(book.date, "HH:mm")}
+                                  </span>
+                                </p>
+                              </div>
                               <Switch />
                             </div>
+                          ))}
+
+                          {invalidBookings.map((book) => (
+                            <>
+                              <div className="flex items-center gap-2">
+                                <Terminal className="h-4 w-4" />
+                                Atenção!{" "}
+                                <span className="text-[14px] text-primary">
+                                  Agendamentos expirados!
+                                </span>
+                              </div>
+                              <div className="flex w-full items-center justify-between space-x-4 rounded-md border p-4">
+                                <Avatar>
+                                  <AvatarImage
+                                    src={book.user.image || "/perfil.png"}
+                                  />
+                                </Avatar>
+                                <div className="flex-1 space-y-1">
+                                  <p className="text-sm font-medium leading-none">
+                                    {book.user.name}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {book.barbershopService.name}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-xs">
+                                    {format(book.date, "d 'de' MMMM", {
+                                      locale: ptBR,
+                                    })}
+                                    <span className="block">
+                                      {format(book.date, "HH:mm")}
+                                    </span>
+                                  </p>
+                                </div>
+                                <DatePicker />
+                              </div>
+                            </>
                           ))}
                         </div>
                       </CardContent>
@@ -169,7 +229,6 @@ const Home = async () => {
                 AGENDAMENTOS
               </h3>
               <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                
                 {bookings.length > 0 ? (
                   bookings.map((booking) => (
                     <BookingItem
@@ -181,7 +240,7 @@ const Home = async () => {
                         barbershopId: booking.barbershopId,
                         barbershopServiceId: booking.barbershopServiceId,
                         barbershop: booking.barbershop,
-                        barbershopService: booking.barbershopService
+                        barbershopService: booking.barbershopService,
                       }}
                     />
                   ))
