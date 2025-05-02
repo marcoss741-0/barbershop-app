@@ -1,17 +1,19 @@
-"use client";
+"use server";
 
-import CreateBarbershopForm from "./create-barbershop-form";
-import {
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
+import db from "../_lib/prisma";
+import { CreateBarbershopForm } from "./create-barbershop-form";
 import { SheetDescription, SheetHeader, SheetTitle } from "./ui/sheet";
 
-const RegisterBarbershops = () => {
+const RegisterBarbershops = async () => {
+  const standardServices = await db.service.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
   return (
     <>
       <SheetHeader className="p-3">
@@ -20,7 +22,7 @@ const RegisterBarbershops = () => {
           Insira os dados da sua barbearia bem como os serviços prestados.
         </SheetDescription>
       </SheetHeader>
-      <CreateBarbershopForm onSubmit={() => {}} />
+      <CreateBarbershopForm standardServices={standardServices} />
     </>
   );
 };

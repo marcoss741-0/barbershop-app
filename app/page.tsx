@@ -23,13 +23,12 @@ import {
   CardHeader,
   CardTitle,
 } from "./_components/ui/card";
-import { BellRing, Check, Terminal } from "lucide-react";
+import { Check, Terminal } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { Switch } from "./_components/ui/switch";
-import RegisterBarbershops from "./_components/drawer-register-barbershops";
+import RegisterBarbershops from "./_components/sheet-register-barbershops";
 import { Sheet, SheetContent, SheetTrigger } from "./_components/ui/sheet";
-import { Alert, AlertDescription, AlertTitle } from "./_components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "./_components/ui/avatar";
+import { Avatar, AvatarImage } from "./_components/ui/avatar";
 import { DatePicker } from "./_components/update-date-booking";
 
 const Home = async () => {
@@ -46,6 +45,7 @@ const Home = async () => {
 
   const invalidBookings = userData.filter((book) => book.date < new Date());
   const validBookings = userData.filter((book) => book.date >= new Date());
+
 
   return (
     <>
@@ -116,7 +116,7 @@ const Home = async () => {
                             side="left"
                             className="w-[90%] overflow-y-auto"
                           >
-                            <RegisterBarbershops />
+                            <RegisterBarbershops  />
                           </SheetContent>
                         </Sheet>
                       </CardContent>
