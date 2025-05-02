@@ -1,59 +1,31 @@
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 async function seedDatabase() {
   try {
-    const images = [
-      "https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png",
-      "https://utfs.io/f/45331760-899c-4b4b-910e-e00babb6ed81-16q.png",
-      "https://utfs.io/f/5832df58-cfd7-4b3f-b102-42b7e150ced2-16r.png",
-      "https://utfs.io/f/7e309eaa-d722-465b-b8b6-76217404a3d3-16s.png",
-      "https://utfs.io/f/178da6b6-6f9a-424a-be9d-a2feb476eb36-16t.png",
-      "https://utfs.io/f/2f9278ba-3975-4026-af46-64af78864494-16u.png",
-      "https://utfs.io/f/988646ea-dcb6-4f47-8a03-8d4586b7bc21-16v.png",
-      "https://utfs.io/f/60f24f5c-9ed3-40ba-8c92-0cd1dcd043f9-16w.png",
-      "https://utfs.io/f/f64f1bd4-59ce-4ee3-972d-2399937eeafc-16x.png",
-      "https://utfs.io/f/e995db6d-df96-4658-99f5-11132fd931e1-17j.png",
-      "https://utfs.io/f/3bcf33fc-988a-462b-8b98-b811ee2bbd71-17k.png",
-      "https://utfs.io/f/5788be0e-2307-4bb4-b603-d9dd237950a2-17l.png",
-      "https://utfs.io/f/6b0888f8-b69f-4be7-a13b-52d1c0c9cab2-17m.png",
-      "https://utfs.io/f/ef45effa-415e-416d-8c4a-3221923cd10f-17n.png",
-      "https://utfs.io/f/ef45effa-415e-416d-8c4a-3221923cd10f-17n.png",
-      "https://utfs.io/f/a55f0f39-31a0-4819-8796-538d68cc2a0f-17o.png",
-      "https://utfs.io/f/5c89f046-80cd-4443-89df-211de62b7c2a-17p.png",
-      "https://utfs.io/f/23d9c4f7-8bdb-40e1-99a5-f42271b7404a-17q.png",
-      "https://utfs.io/f/9f0847c2-d0b8-4738-a673-34ac2b9506ec-17r.png",
-      "https://utfs.io/f/07842cfb-7b30-4fdc-accc-719618dfa1f2-17s.png",
-      "https://utfs.io/f/0522fdaf-0357-4213-8f52-1d83c3dcb6cd-18e.png",
-    ];
-    // Nomes criativos para as barbearias
     const creativeNames = [
-      "Barbearia Vintage",
-      "Corte & Estilo",
-      "Barba & Navalha",
-      "The Dapper Den",
-      "Cabelo & Cia.",
-      "Machado & Tesoura",
-      "Barbearia Elegance",
-      "Aparência Impecável",
-      "Estilo Urbano",
-      "Estilo Clássico",
+      "Barbearia Alpha",
+      "Barbearia Beta",
+      "Barbearia Gama",
+      "Barbearia Delta",
+      "Barbearia Épsilon",
+      "Barbearia Zeta",
+      "Barbearia Ômega",
+      "Barbearia Lux",
+      "Barbearia Urbana",
+      "Barbearia Vip",
     ];
+    const addresses = creativeNames.map(
+      (_, i) => `Rua Exemplo ${i + 1}, São Paulo - SP`,
+    );
+    const images = creativeNames.map(
+      (_, i) => `https://picsum.photos/400/400?random=${i}`,
+    );
 
-    // Endereços fictícios para as barbearias
-    const addresses = [
-      "Rua da Barbearia, 123",
-      "Avenida dos Cortes, 456",
-      "Praça da Barba, 789",
-      "Travessa da Navalha, 101",
-      "Alameda dos Estilos, 202",
-      "Estrada do Machado, 303",
-      "Avenida Elegante, 404",
-      "Praça da Aparência, 505",
-      "Rua Urbana, 606",
-      "Avenida Clássica, 707",
-    ];
+    const users = Array.from({ length: 10 }, (_, i) => ({
+      name: `Usuário ${i + 1}`,
+      email: `teste${i + 1}@gmail.com`,
+    }));
 
     const services = [
       {
@@ -100,40 +72,33 @@ async function seedDatabase() {
       },
     ];
 
-    const users = [
-      { name: "Marcos Martins", email: "teste@gmail.com" },
-      { name: "Matheus Martins", email: "teste2@gmail.com" },
-      { name: "Arthur Rodrigues", email: "teste3@gmail.com" },
-      { name: "Felipe Martins", email: "teste4@gmail.com" },
-      { name: "Richard Grady", email: "teste5@gmail.com" },
-      { name: "Thiado Silva", email: "teste6@gmail.com" },
-      { name: "Fred Guedes", email: "teste7@gmail.com" },
-      { name: "Bernard Gouveia", email: "teste8@gmail.com" },
-      { name: "Fausto Vera", email: "teste9@gmail.com" },
-      { name: "Allan Franco", email: "teste10@gmail.com" },
-    ];
+    // Criar serviços uma vez só
+    const createdServices = await Promise.all(
+      services.map((service) =>
+        prisma.service.upsert({
+          where: { name: service.name },
+          update: {},
+          create: service,
+        }),
+      ),
+    );
 
-    // Criar 10 barbearias com nomes e endereços fictícios
-    const barbershops = [];
     for (let i = 0; i < 10; i++) {
       const name = creativeNames[i];
       const address = addresses[i];
       const imageUrl = images[i];
-
-      // Associa cada barbearia a um usuário do array `users`
-      const user = users[i % users.length]; // Garante que os usuários sejam reutilizados se houver mais barbearias do que usuários
+      const user = users[i];
 
       const barbershop = await prisma.barbershop.create({
         data: {
           name,
           address,
-          imageUrl: imageUrl,
-          phones: ["(11) 99999-9999", "(11) 99999-9999"],
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
+          imageUrl,
+          phones: ["(11) 99999-9999", "(11) 88888-8888"],
+          description: "Lorem ipsum dolor sit amet...",
           user: {
             connectOrCreate: {
-              where: { email: user.email }, // Verifica se o usuário já existe pelo email
+              where: { email: user.email },
               create: {
                 name: user.name,
                 email: user.email,
@@ -143,29 +108,40 @@ async function seedDatabase() {
         },
       });
 
-      for (const service of services) {
-        await prisma.barbershopService.create({
-          data: {
-            name: service.name,
-            description: service.description,
-            price: service.price,
-            barbershop: {
-              connect: {
-                id: barbershop.id,
-              },
-            },
-            imageUrl: service.imageUrl,
-          },
-        });
-      }
+      // Associar serviços existentes a cada barbearia
+      await Promise.all(
+        createdServices.map((service) => {
+          if (
+            !service.name ||
+            !service.description ||
+            !service.price ||
+            !service.imageUrl
+          ) {
+            throw new Error(
+              `Dados incompletos para o serviço com ID ${service.id}`,
+            );
+          }
 
-      barbershops.push(barbershop);
+          return prisma.barbershopService.create({
+            data: {
+              barbershopId: barbershop.id,
+              serviceId: service.id,
+              name: service.name,
+              description: service.description,
+              price: service.price,
+              imageUrl: service.imageUrl,
+            },
+          });
+        }),
+      );
     }
 
-    // Fechar a conexão com o banco de dados
     await prisma.$disconnect();
+    console.log("Seed finalizado com sucesso.");
   } catch (error) {
-    console.error("Erro ao criar as barbearias:", error);
+    console.error("Erro ao fazer seed:", error);
+    await prisma.$disconnect();
+    process.exit(1);
   }
 }
 

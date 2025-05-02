@@ -1,6 +1,7 @@
 import db from "../_lib/prisma";
 import { auth } from "../_lib/auth-option";
 
+
 export const queryBookings = async () => {
   const session = await auth();
   if (!session?.user) {
@@ -13,12 +14,16 @@ export const queryBookings = async () => {
         gte: new Date(),
       },
     },
-    include: {
-      service: {
-        include: {
-          barbershop: true,
-        },
-      },
+    select:{
+      barbershopService: true,
+      barbershop: true,
+      id: true,
+      barbershopId: true,
+      user: true,
+      userId: true,
+      date: true,
+      barbershopServiceId: true,
+
     },
     orderBy: {
       date: "desc",
@@ -88,7 +93,7 @@ export const queryAllBookings = async () => {
   if (!session?.user) {
     throw new Error("Voce não esta logado!");
   }
-  return await db.booking.findMany({
+  const bookings = await db.booking.findMany({
     where: {
       userId: (session.user as { id: string }).id,
       OR: [
@@ -104,17 +109,24 @@ export const queryAllBookings = async () => {
         },
       ],
     },
-    include: {
-      service: {
-        include: {
-          barbershop: true,
-        },
-      },
+    select:{
+      id: true,
+      date: true,
+      barbershopService: true,
+      barbershop: true,
     },
     orderBy: {
       date: "desc",
     },
   });
+
+  // Mapeia os resultados para o formato esperado
+  return bookings.map(booking => ({
+    id: booking.id,
+    date: booking.date,
+    barbershop: booking.barbershop,
+    service: booking.barbershopService // renomeia barbershopService para service
+  }));
 };
 
 export const queryUser = async (email: string) => {
@@ -130,25 +142,28 @@ export const queryUser = async (email: string) => {
 
 export const queryBarbershopByUser = async (userId?: string) => {
   if (!userId) {
-    // Retorna null ou lança um erro, dependendo do comportamento desejado
     return null;
   }
 
+  // Busca todas as barbearias do usuário dono
+  const barbershops = await db.barbershop.findMany({
+    where: { userId },
+    select: { id: true },
+  });
+
+  const barbershopIds = barbershops.map(b => b.id);
+
+  // Busca todos os agendamentos nessas barbearias, trazendo os dados do usuário que fez o agendamento
   const bookings = await db.booking.findMany({
     where: {
-      service: {
-        barbershop: {
-          userId: userId, // Relaciona as barbearias ao usuário
-        },
-      },
+      barbershopId: { in: barbershopIds },
     },
-    include: {
-      user: true, // Inclui informações do usuário que fez o agendamento
-      service: {
-        include: {
-          barbershop: true, // Inclui informações da barbearia
-        },
-      },
+    select: {
+      user: true, // Dados do usuário que fez o agendamento
+      barbershop: true,
+      barbershopService: true,
+      date: true,
+      id: true,
     },
     orderBy: {
       date: "desc",
@@ -163,17 +178,48 @@ export const countBookingsByUserBarbershops = async (userId: string) => {
     return null;
   }
 
+  // Busca todas as barbearias do usuário
+  const barbershops = await db.barbershop.findMany({
+    where: { userId },
+    select: { id: true },
+  });
+
+  const barbershopIds = barbershops.map(b => b.id);
+
+  // Conta os agendamentos feitos por outros usuários nessas barbearias
   const bookingCount = await db.booking.count({
     where: {
-      service: {
-        barbershop: {
-          userId,
-        },
-      },
+      barbershopId: { in: barbershopIds },
+      userId: { not: userId }, // Exclui agendamentos feitos pelo próprio dono
     },
   });
 
   return bookingCount;
+};
+
+export const userHasBarbershop = async (userId: string) => {
+  if (!userId) {
+    return null;
+  }
+
+  const hasBarbershops = await db.barbershop.findUnique({
+    where: {
+      userId,
+    },
+  });
+
+  return !!hasBarbershops;
+};
+
+export const availableServices = async () => {
+  const services = await db.barbershopService.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  return services;
 };
 
 export const createBarbershop = async (

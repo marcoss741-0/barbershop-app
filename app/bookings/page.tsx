@@ -4,6 +4,7 @@ import { queryAllBookings } from "../_data/query-on-db";
 import { auth } from "../_lib/auth-option";
 import { redirect } from "next/navigation";
 
+
 const Bookings = async () => {
   const session = await auth();
   if (!session || !session.user) {
@@ -36,7 +37,18 @@ const Bookings = async () => {
             CONFIRMADOS
           </h3>
           {confirmedBookings.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
+            <BookingItem 
+              key={booking.id} 
+              booking={{
+                id: booking.id,
+                date: booking.date,
+                userId: session.user.id,
+                barbershopId: booking.barbershop.id,
+                barbershopServiceId: booking.service.id,
+                barbershop: booking.barbershop,
+                barbershopService: booking.service
+              }}
+            />
           ))}
         </div>
       )}
@@ -47,7 +59,18 @@ const Bookings = async () => {
             FINALIZADOS
           </h3>
           {pastBookings.map((pastBooking) => (
-            <BookingItem key={pastBooking.id} booking={pastBooking} />
+            <BookingItem 
+              key={pastBooking.id}
+              booking={{
+                id: pastBooking.id,
+                date: pastBooking.date,
+                userId: session.user.id,
+                barbershopId: pastBooking.barbershop.id,
+                barbershopServiceId: pastBooking.service.id,
+                barbershop: pastBooking.barbershop,
+                barbershopService: pastBooking.service
+              }}
+            />
           ))}
         </div>
       )}

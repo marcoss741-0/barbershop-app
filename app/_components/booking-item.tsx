@@ -35,7 +35,7 @@ import BookingResume from "./booking-resume";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
-    include: { service: { include: { barbershop: true } } };
+    include: { barbershopService: true; barbershop: true };
   }>;
 }
 
@@ -61,10 +61,6 @@ const BookingItem = ({ booking }: BookingItemProps) => {
   const handleSheetOpenChange = (isOpen: boolean) => {
     setSheetOpen(isOpen);
   };
-
-  const {
-    service: { barbershop },
-  } = booking;
 
   return (
     <>
@@ -93,13 +89,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 <CardContent className="flex items-center gap-3 px-5 py-3">
                   <Avatar>
                     <AvatarImage
-                      src={barbershop.imageUrl}
-                      alt={`Perfil da barbearia ${barbershop.name}`}
+                      src={booking.barbershop.imageUrl}
+                      alt={`Perfil da barbearia ${booking.barbershop.name}`}
                     />
                   </Avatar>
                   <div className="flex flex-col justify-start gap-1">
-                    <h3 className="font-bold">{barbershop.name}</h3>
-                    <p className="text-xs">{barbershop.address}</p>
+                    <h3 className="font-bold">{booking.barbershop.name}</h3>
+                    <p className="text-xs">{booking.barbershop.address}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -110,14 +106,14 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             </Badge>
 
             <BookingResume
-              barbershop={barbershop}
-              service={booking.service}
+              barbershop={booking.barbershop}
+              service={booking.barbershopService}
               selectedDate={booking.date}
             />
 
             <div className="flex flex-col gap-3 p-5">
               <h2 className="text-sm font-medium text-foreground">CONTATO</h2>
-              {barbershop.phones.map((phone, index) => (
+              {booking.barbershop.phones.map((phone, index) => (
                 <PhoneItem key={index} phone={phone} />
               ))}
             </div>

@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
-    include: { service: { include: { barbershop: true } } };
+    include: { barbershopService: true; barbershop: true };
   }>;
 }
 
@@ -24,7 +24,7 @@ const BookingSummary = ({ booking }: BookingItemProps) => {
             {isConfirmed ? "Confirmado" : "Finalizado"}
           </Badge>
           <h3 className="text-nowrap text-[16px] font-bold">
-            {booking.service.name}
+            {booking.barbershopService.name}
           </h3>
 
           <div className="flex items-center justify-start gap-2">
@@ -32,12 +32,12 @@ const BookingSummary = ({ booking }: BookingItemProps) => {
               <AvatarImage
                 width={32}
                 height={32}
-                src={booking.service.imageUrl}
+                src={booking.barbershopService.imageUrl}
                 alt="Avatar"
               />
             </Avatar>
             <p className="text-nowrap text-sm">
-              {booking.service.barbershop.name}
+              {booking.barbershop.name}
             </p>
           </div>
         </div>

@@ -12,6 +12,7 @@ import {
   queryBarbershops,
   queryBookings,
   queryMostPopularBarber,
+  userHasBarbershop,
 } from "./_data/query-on-db";
 import FastSearch from "./_components/fast-search-buttons";
 import { auth } from "./_lib/auth-option";
@@ -26,6 +27,12 @@ import {
 import { BellRing, Check } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { Switch } from "./_components/ui/switch";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+} from "./_components/ui/drawer";
+import RegisterBarbershops from "./_components/drawer-register-barbershops";
 
 const Home = async () => {
   const session = await auth();
@@ -37,6 +44,7 @@ const Home = async () => {
   const countBookingByBarbershopUser = await countBookingsByUserBarbershops(
     session?.user?.id,
   );
+  const hasBarbershops = await userHasBarbershop(session?.user?.id);
 
   return (
     <>
@@ -80,43 +88,77 @@ const Home = async () => {
                 <h3 className="text-[16px] font-semibold text-foreground">
                   DASBOARD
                 </h3>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold">
-                      AGENDAMENTOS
-                    </CardTitle>
-                    <CardDescription className="text-[16px] text-foreground">
-                      Sua Barbearia possui{" "}
-                      <span className="font-bold">
-                        {countBookingByBarbershopUser}
-                      </span>{" "}
-                      agendamentos.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex flex-col gap-4">
-                    <div className="space-y-4">
-                      {userData.map((book) => (
-                        <div className="flex items-center space-x-4 rounded-md border p-4">
-                          <BellRing />
-                          <div className="flex-1 space-y-1">
-                            <p className="text-sm font-medium leading-none">
-                              {book.user.name}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {book.service.name}
-                            </p>
-                          </div>
-                          <Switch />
+                {!hasBarbershops ? (
+                  <>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg font-semibold">
+                          Cadastre sua barbearia
+                        </CardTitle>
+                        <CardDescription className="text-sm text-foreground">
+                          Possui, uma{" "}
+                          <span className="font-bold text-primary">
+                            barbearia?
+                          </span>
+                          . Você pode oferecer seus serviços pela nossa
+                          plataforma.
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Drawer>
+                          <DrawerTrigger asChild>
+                            <Button className="w-full cursor-pointer p-3 text-lg font-medium">
+                              Começar
+                            </Button>
+                          </DrawerTrigger>
+                          <DrawerContent>
+                            <RegisterBarbershops />
+                          </DrawerContent>
+                        </Drawer>
+                      </CardContent>
+                    </Card>
+                  </>
+                ) : (
+                  <>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg font-semibold">
+                          AGENDAMENTOS
+                        </CardTitle>
+                        <CardDescription className="text-[16px] text-foreground">
+                          Sua Barbearia possui{" "}
+                          <span className="font-bold">
+                            {countBookingByBarbershopUser}
+                          </span>{" "}
+                          agendamentos.
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex flex-col gap-4">
+                        <div className="space-y-4">
+                          {userData.map((book) => (
+                            <div className="flex items-center space-x-4 rounded-md border p-4">
+                              <BellRing />
+                              <div className="flex-1 space-y-1">
+                                <p className="text-sm font-medium leading-none">
+                                  {book.user.name}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                  {book.barbershopService.name}
+                                </p>
+                              </div>
+                              <Switch />
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full">
-                      <Check /> Mark all as read
-                    </Button>
-                  </CardFooter>
-                </Card>
+                      </CardContent>
+                      <CardFooter>
+                        <Button className="w-full">
+                          <Check /> Mark all as read
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </>
+                )}
               </div>
             </>
           )}
@@ -127,21 +169,22 @@ const Home = async () => {
                 AGENDAMENTOS
               </h3>
               <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                
                 {bookings.length > 0 ? (
-                  bookings.map(
-                    (
-                      booking: Prisma.BookingGetPayload<{
-                        include: {
-                          service: { include: { barbershop: true } };
-                        };
-                      }>,
-                    ) => (
-                      <BookingItem
-                        key={JSON.parse(JSON.stringify(booking.id))}
-                        booking={JSON.parse(JSON.stringify(booking))}
-                      />
-                    ),
-                  )
+                  bookings.map((booking) => (
+                    <BookingItem
+                      key={booking.id}
+                      booking={{
+                        id: booking.id,
+                        userId: booking.userId,
+                        date: booking.date,
+                        barbershopId: booking.barbershopId,
+                        barbershopServiceId: booking.barbershopServiceId,
+                        barbershop: booking.barbershop,
+                        barbershopService: booking.barbershopService
+                      }}
+                    />
+                  ))
                 ) : (
                   <div className="flex w-full items-center justify-center">
                     <p className="text-sm font-medium text-secondary-foreground">

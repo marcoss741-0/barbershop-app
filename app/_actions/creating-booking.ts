@@ -5,7 +5,8 @@ import db from "../_lib/prisma";
 import { auth } from "../_lib/auth-option";
 
 interface CreatingBookingParams {
-  serviceId: string;
+  barbershopServiceId: string;
+  barbershopId: string;
   date: Date;
 }
 
@@ -17,8 +18,10 @@ const creatingBooking = async (params: CreatingBookingParams) => {
   }
   await db.booking.create({
     data: {
-      ...params,
+      date: params.date,
       userId: (user.user as { id: string }).id,
+      barbershopId: params.barbershopId,
+      barbershopServiceId: params.barbershopServiceId,
     },
   });
 };

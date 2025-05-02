@@ -28,7 +28,7 @@ import { useRouter } from "next/navigation";
 
 interface BarbershopServicesProps {
   service: BarbershopService;
-  barbershop: Pick<Barbershop, "name">;
+  barbershop: Pick<Barbershop, "name" | "id">;
 }
 
 const TIME_LIST = [
@@ -139,7 +139,8 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
 
       await creatingBooking({
         date: selectedDate,
-        serviceId: jsonService.id,
+        barbershopServiceId: service.id,
+        barbershopId: barbershop.id
       });
 
       toast("Agendamento realizado!", {

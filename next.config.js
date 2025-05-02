@@ -6,6 +6,9 @@ const nextConfig = {
       {
         hostname: "utfs.io",
       },
+      {
+        hostname: "picsum.photos",
+      },
     ],
   },
 };
