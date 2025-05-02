@@ -1,7 +1,6 @@
 import db from "../_lib/prisma";
 import { auth } from "../_lib/auth-option";
 
-
 export const queryBookings = async () => {
   const session = await auth();
   if (!session?.user) {
@@ -14,7 +13,7 @@ export const queryBookings = async () => {
         gte: new Date(),
       },
     },
-    select:{
+    select: {
       barbershopService: true,
       barbershop: true,
       id: true,
@@ -23,7 +22,6 @@ export const queryBookings = async () => {
       userId: true,
       date: true,
       barbershopServiceId: true,
-
     },
     orderBy: {
       date: "desc",
@@ -109,7 +107,7 @@ export const queryAllBookings = async () => {
         },
       ],
     },
-    select:{
+    select: {
       id: true,
       date: true,
       barbershopService: true,
@@ -121,11 +119,11 @@ export const queryAllBookings = async () => {
   });
 
   // Mapeia os resultados para o formato esperado
-  return bookings.map(booking => ({
+  return bookings.map((booking) => ({
     id: booking.id,
     date: booking.date,
     barbershop: booking.barbershop,
-    service: booking.barbershopService // renomeia barbershopService para service
+    service: booking.barbershopService, // renomeia barbershopService para service
   }));
 };
 
@@ -151,7 +149,7 @@ export const queryBarbershopByUser = async (userId?: string) => {
     select: { id: true },
   });
 
-  const barbershopIds = barbershops.map(b => b.id);
+  const barbershopIds = barbershops.map((b) => b.id);
 
   // Busca todos os agendamentos nessas barbearias, trazendo os dados do usuário que fez o agendamento
   const bookings = await db.booking.findMany({
@@ -184,7 +182,7 @@ export const countBookingsByUserBarbershops = async (userId: string) => {
     select: { id: true },
   });
 
-  const barbershopIds = barbershops.map(b => b.id);
+  const barbershopIds = barbershops.map((b) => b.id);
 
   // Conta os agendamentos feitos por outros usuários nessas barbearias
   const bookingCount = await db.booking.count({
@@ -212,7 +210,7 @@ export const userHasBarbershop = async (userId: string) => {
 };
 
 export const availableServices = async () => {
-  const services = await db.barbershopService.findMany({
+  const services = await db.service.findMany({
     select: {
       id: true,
       name: true,
