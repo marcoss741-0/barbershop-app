@@ -378,16 +378,13 @@ export function ManageBarbershopServices({
                       className="h-16 w-16 rounded-md object-cover"
                     />
                     <div>
-                      <p className="font-semibold">{service.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Base: {service.Service?.name || "N/A"}
-                      </p>
+                      <p className="font-medium text-[14px]">{service.name}</p>
                       <p className="text-sm font-bold">
                         R$ {Number(service.price)}
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-2">
                     {/* Edit Button/Dialog */}
                     <Dialog
                       open={
