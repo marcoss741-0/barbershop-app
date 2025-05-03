@@ -1,19 +1,9 @@
 "use server";
 
-import db from "../_lib/prisma";
-import { CreateBarbershopForm } from "./create-barbershop-form";
+import { CreateBasicBarbershopForm } from "./create-basic-barbershop-form";
 import { SheetDescription, SheetHeader, SheetTitle } from "./ui/sheet";
 
 const RegisterBarbershops = async () => {
-  const standardServices = await db.service.findMany({
-    select: {
-      id: true,
-      name: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
   return (
     <>
       <SheetHeader className="p-3">
@@ -22,7 +12,7 @@ const RegisterBarbershops = async () => {
           Insira os dados da sua barbearia bem como os serviços prestados.
         </SheetDescription>
       </SheetHeader>
-      <CreateBarbershopForm standardServices={standardServices} />
+      <CreateBasicBarbershopForm />
     </>
   );
 };

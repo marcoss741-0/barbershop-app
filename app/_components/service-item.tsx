@@ -191,8 +191,8 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
     <>
       {/* Card do serviço */}
       <Card className="w-full py-1">
-        <CardContent className="flex w-full items-center justify-between gap-3 px-2 font-medium text-foreground">
-          <div className="relative max-h-28 min-h-28 min-w-28 max-w-28">
+        <CardContent className="flex w-full items-center gap-4 px-4 py-3">
+          <div className="relative h-24 w-24 shrink-0">
             <Image
               className="rounded-lg object-cover"
               alt={jsonService.name}
@@ -201,18 +201,23 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
               fill
             />
           </div>
-          <div className="flex flex-col gap-1 p-2">
-            <h1 className="mb-2 text-sm font-semibold">{jsonService.name}</h1>
-            <p className="text-xs">{jsonService.description}</p>
+
+          <div className="flex flex-1 flex-col gap-2">
+            <div className="space-y-1">
+              <h1 className="text-base font-semibold">{jsonService.name}</h1>
+              <p className="line-clamp-2 text-sm text-muted-foreground">
+                {jsonService.description}
+              </p>
+            </div>
 
             <div className="flex items-center justify-between">
-              <p className="font-semibold text-primary">
+              <p className="text-base font-semibold text-primary">
                 {formatCurrencyBRL(Number(jsonService.price))}
               </p>
               <Button
                 variant="default"
                 size="sm"
-                className="border"
+                className="h-8 px-4"
                 onClick={handleBookingClick}
               >
                 Reservar

@@ -23,13 +23,16 @@ import {
   CardHeader,
   CardTitle,
 } from "./_components/ui/card";
-import { Check, Terminal } from "lucide-react";
+import { Check, Cog, Terminal } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { Switch } from "./_components/ui/switch";
 import RegisterBarbershops from "./_components/sheet-register-barbershops";
 import { Sheet, SheetContent, SheetTrigger } from "./_components/ui/sheet";
 import { Avatar, AvatarImage } from "./_components/ui/avatar";
 import { DatePicker } from "./_components/update-date-booking";
+import { Popover, PopoverContent } from "./_components/ui/popover";
+import { PopoverTrigger } from "@radix-ui/react-popover";
+import Link from "next/link";
 
 const Home = async () => {
   const session = await auth();
@@ -45,7 +48,6 @@ const Home = async () => {
 
   const invalidBookings = userData.filter((book) => book.date < new Date());
   const validBookings = userData.filter((book) => book.date >= new Date());
-
 
   return (
     <>
@@ -87,7 +89,7 @@ const Home = async () => {
             <>
               <div className="mt-4 w-full items-center gap-2 space-y-4">
                 <h3 className="text-[16px] font-semibold text-foreground">
-                  DASBOARD
+                  DASHBOARD
                 </h3>
                 {!hasBarbershops ? (
                   <>
@@ -116,7 +118,7 @@ const Home = async () => {
                             side="left"
                             className="w-[90%] overflow-y-auto"
                           >
-                            <RegisterBarbershops  />
+                            <RegisterBarbershops />
                           </SheetContent>
                         </Sheet>
                       </CardContent>
@@ -126,8 +128,27 @@ const Home = async () => {
                   <>
                     <Card>
                       <CardHeader>
-                        <CardTitle className="text-lg font-semibold">
+                        <CardTitle className="intems-center flex justify-between text-lg font-semibold">
                           Clientes Agendados
+                          <Popover>
+                            <PopoverTrigger>
+                              <Cog />
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <div className="flex flex-col items-center justify-center">
+                                <h1 className="text-lg font-normal">
+                                  Gerenciar sua barbearia
+                                </h1>
+
+                                <Link
+                                  className="text-primary hover:scale-[110%] hover:transition-all"
+                                  href={`/admin/barbershops/${hasBarbershops.id}`}
+                                >
+                                  Vá Para o painel
+                                </Link>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
                         </CardTitle>
                         <CardDescription className="text-[16px] text-foreground">
                           A sua{" "}
@@ -141,7 +162,7 @@ const Home = async () => {
                           agendamentos.
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="flex h-[260px] flex-col gap-4 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+                      <CardContent className="flex max-h-[250px] flex-col gap-4 overflow-y-auto [&::-webkit-scrollbar]:hidden">
                         <div className="space-y-4">
                           {validBookings.map((book) => (
                             <div className="flex items-center justify-between space-x-4 rounded-md border p-4">
@@ -213,7 +234,7 @@ const Home = async () => {
                       </CardContent>
                       <CardFooter>
                         <Button className="w-full">
-                          <Check /> Mark all as read
+                          <Check /> Receber Notificação de todas
                         </Button>
                       </CardFooter>
                     </Card>

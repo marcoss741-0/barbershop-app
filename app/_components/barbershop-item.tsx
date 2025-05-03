@@ -1,3 +1,5 @@
+"use client";
+
 import { Barbershop } from "@prisma/client";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
@@ -5,16 +7,17 @@ import { Button } from "./ui/button";
 import { Star } from "lucide-react";
 import { Badge } from "./ui/badge";
 import Link from "next/link";
+import { useState } from "react";
 
 interface BarbershopItemProps {
   barbershop: Barbershop;
 }
 
 const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
+  const [imgSrc, setImgSrc] = useState(barbershop.imageUrl)
+
   return (
     <>
-      {/* <h1>{barbershop.name}</h1> */}
-
       <Card className="min-w-[160px]">
         <CardContent className="p-0 px-1 pt-1">
           <div className="relative h-[160px] w-full">
@@ -22,8 +25,9 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="rounded-2xl object-cover"
-              src={barbershop.imageUrl}
+              src={imgSrc && imgSrc.trim() !== "" ? imgSrc : "https://res.cloudinary.com/dz84imb8z/image/upload/v1746268642/barbershop_images/wbqrlbecp5k74wqais0p.png"}
               alt={barbershop.name}
+              onError={()=> setImgSrc("https://res.cloudinary.com/dz84imb8z/image/upload/v1746268642/barbershop_images/wbqrlbecp5k74wqais0p.png")}
             />
 
             <Badge
