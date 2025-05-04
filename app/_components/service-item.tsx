@@ -31,7 +31,7 @@ interface BarbershopServicesProps {
   barbershop: Pick<Barbershop, "name" | "id">;
 }
 
-const TIME_LIST = [
+export const TIME_LIST = [
   "08:00",
   "08:30",
   "09:00",
@@ -55,7 +55,7 @@ const TIME_LIST = [
   "18:00",
 ];
 
-interface GetTimeListProps {
+export interface GetTimeListProps {
   bookings: Booking[];
   selectedDay: Date;
 }

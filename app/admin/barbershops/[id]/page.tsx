@@ -94,11 +94,7 @@ const BarbershopDetailsPage = async ({
           </CardHeader>
           <CardContent className="flex flex-col">
             {barbershop.imageUrl ? (
-              <img
-                src={barbershop.imageUrl}
-                alt={`Imagem de ${barbershop.name}`}
-                className="mb-8 h-40 w-full rounded-md object-cover"
-              />
+              <></>
             ) : (
               <Alert className="mb-8">
                 <Terminal className="h-4 w-4" />
@@ -120,7 +116,6 @@ const BarbershopDetailsPage = async ({
           </CardContent>
         </Card>
 
-        {/* Seção 3: Gerenciar Serviços */}
         <Card className="md:col-span-2 lg:col-span-1">
           <CardHeader>
             <CardTitle>Serviços Oferecidos</CardTitle>

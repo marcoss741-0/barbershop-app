@@ -185,7 +185,9 @@ const Home = async () => {
                                     locale: ptBR,
                                   })}
                                   <span className="block">
-                                    {format(book.date, "HH:mm")}
+                                    {format(book.date, "HH:mm", {
+                                      locale: ptBR,
+                                    })}
                                   </span>
                                 </p>
                               </div>
@@ -193,7 +195,7 @@ const Home = async () => {
                             </div>
                           ))}
 
-                          {invalidBookings.map((book) => (
+                          {invalidBookings.length > 0 && (
                             <>
                               <div className="flex items-center gap-2">
                                 <Terminal className="h-4 w-4" />
@@ -202,34 +204,40 @@ const Home = async () => {
                                   Agendamentos expirados!
                                 </span>
                               </div>
-                              <div className="flex w-full items-center justify-between space-x-4 rounded-md border p-4">
-                                <Avatar>
-                                  <AvatarImage
-                                    src={book.user.image || "/perfil.png"}
+                              {invalidBookings.map((book) => (
+                                <div
+                                  key={book.id}
+                                  className="flex w-full items-center justify-between space-x-4 rounded-md border p-4"
+                                >
+                                  <Avatar>
+                                    <AvatarImage
+                                      src={book.user.image || "/perfil.png"}
+                                    />
+                                  </Avatar>
+                                  <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium leading-none">
+                                      {book.user.name}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                      {book.barbershopService.name}
+                                    </p>
+                                  </div>
+                                  <div className="flex flex-col items-center justify-center text-xs font-semibold capitalize">
+                                    <p className="flex flex-col">
+                                      {format(book.date, "d MMM", {
+                                        locale: ptBR,
+                                      })}
+                                      <span>{format(book.date, "HH:mm")}</span>
+                                    </p>
+                                  </div>
+                                  <DatePicker
+                                    bookingId={book.id}
+                                    serviceId={book.barbershopService.id}
                                   />
-                                </Avatar>
-                                <div className="flex-1 space-y-1">
-                                  <p className="text-sm font-medium leading-none">
-                                    {book.user.name}
-                                  </p>
-                                  <p className="text-sm text-muted-foreground">
-                                    {book.barbershopService.name}
-                                  </p>
                                 </div>
-                                <div>
-                                  <p className="text-xs">
-                                    {format(book.date, "d 'de' MMMM", {
-                                      locale: ptBR,
-                                    })}
-                                    <span className="block">
-                                      {format(book.date, "HH:mm")}
-                                    </span>
-                                  </p>
-                                </div>
-                                <DatePicker />
-                              </div>
+                              ))}
                             </>
-                          ))}
+                          )}
                         </div>
                       </CardContent>
                       <CardFooter>
