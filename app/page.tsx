@@ -33,6 +33,7 @@ import { DatePicker } from "./_components/update-date-booking";
 import { Popover, PopoverContent } from "./_components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "./_components/ui/alert";
 
 const Home = async () => {
   const session = await auth();
@@ -54,7 +55,7 @@ const Home = async () => {
       <div>
         <Header />
 
-        <div className="gap-1 px-5 py-6">
+        <div className="space-y-4 px-5 py-6">
           <h2 className="text-xl font-medium text-foreground">
             Olá,{" "}
             <span className="font-medium capitalize text-primary">
@@ -252,7 +253,7 @@ const Home = async () => {
             </>
           )}
 
-          {session?.user && (
+          {session?.user && babershops.length > 0 ? (
             <div className="mt-4 w-full items-center gap-2 space-y-4">
               <h3 className="text-[16px] font-semibold text-foreground">
                 AGENDAMENTOS
@@ -282,33 +283,53 @@ const Home = async () => {
                 )}
               </div>
             </div>
+          ) : (
+            <></>
           )}
 
-          <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-foreground">
-              RECOMENDADOS
-            </h3>
+          {babershops && babershops.length > 0 ? (
+            <div className="mt-4 w-full items-center gap-2 space-y-4">
+              <h3 className="text-[16px] font-semibold text-foreground">
+                RECOMENDADOS
+              </h3>
 
-            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-              {babershops.map((babershop) => (
-                <BarbershopItem key={babershop.id} barbershop={babershop} />
-              ))}
+              <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                {babershops.map((babershop) => (
+                  <BarbershopItem key={babershop.id} barbershop={babershop} />
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
 
-          <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-foreground">
-              POPULARES
-            </h3>
+          {popularBarbershop && popularBarbershop.length > 0 ? (
+            <div className="mt-4 w-full items-center gap-2 space-y-4">
+              <h3 className="text-[16px] font-semibold text-foreground">
+                POPULARES
+              </h3>
 
-            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-              {popularBarbershop.map((pop) => (
-                <BarbershopItem key={pop.id} barbershop={pop} />
-              ))}
+              <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                {popularBarbershop.map((pop) => (
+                  <BarbershopItem key={pop.id} barbershop={pop} />
+                ))}
+              </div>
             </div>
-          </div>
-
-          {/* stay here */}
+          ) : (
+            <>
+              <div className="flex items-center justify-center rounded-md p-4">
+                <Alert>
+                  <Terminal className="h-4 w-4" />
+                  <AlertTitle>Ooops, Galera!</AlertTitle>
+                  <AlertDescription>
+                    A Plataforma esta em{" "}
+                    <span className="font-semibold text-primary">Beta</span> e
+                    ainda não temos associados, logo, logo estará tudo pronto!!
+                  </AlertDescription>
+                </Alert>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

@@ -16,7 +16,7 @@ interface BasicBarbershopData {
 }
 
 export const createBasicBarbershop = async (
-  barbershopData: BasicBarbershopData
+  barbershopData: BasicBarbershopData,
 ) => {
   // 1. Verificar autenticação e obter ID do usuário
   const session = await auth();
@@ -51,26 +51,32 @@ export const createBasicBarbershop = async (
       error: null,
       barbershopId: newBarbershop.id, // Retorna o ID para redirecionamento
     };
-
   } catch (error) {
     console.error("Erro ao criar barbearia básica:", error);
     // Verificar se é um erro conhecido do Prisma ou outro tipo
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Exemplo: Tratar erro de constraint única (ex: nome já existe)
-      if (error.code === 'P2002') {
+      if (error.code === "P2002") {
         // Tenta identificar qual campo causou o erro, se possível
         const target = (error.meta?.target as string[]) || [];
-        if (target.includes('name')) {
-          return { success: false, error: "Já existe uma barbearia com este nome.", barbershopId: null };
+        if (target.includes("name")) {
+          return {
+            success: false,
+            error: "Já existe uma barbearia com este nome.",
+            barbershopId: null,
+          };
         }
-        return { success: false, error: "Erro de constraint: Verifique dados únicos.", barbershopId: null };
+        return {
+          success: false,
+          error: "Erro de constraint: Verifique dados únicos.",
+          barbershopId: null,
+        };
       }
     }
     return {
       success: false,
-      error: "Ocorreu um erro inesperado ao criar a barbearia.",
+      error: "Ocorreu um erro inesperado ao criar a barbearia." + error,
       barbershopId: null,
     };
   }
 };
-

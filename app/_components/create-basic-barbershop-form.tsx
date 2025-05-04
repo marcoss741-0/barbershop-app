@@ -153,7 +153,11 @@ export function CreateBasicBarbershopForm() {
           )}
         />
 
-        <Button type="submit" disabled={isLoading}>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full font-semibold"
+        >
           {isLoading ? (
             <Image
               src="/loading2.svg"
@@ -162,7 +166,7 @@ export function CreateBasicBarbershopForm() {
               alt="Loading..."
             />
           ) : (
-            "Criar Barbearia e Continuar"
+            "Criar e Continuar"
           )}
         </Button>
       </form>

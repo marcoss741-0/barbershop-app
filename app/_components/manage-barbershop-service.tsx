@@ -44,6 +44,7 @@ import {
   barbershopServiceFormSchema,
   ServiceForm,
 } from "./service-form";
+import { formatCurrencyBRL } from "../helpers/formart-currency";
 
 // --- Props para o ManageBarbershopServices (igual antes) ---
 interface ManageBarbershopServicesProps {
@@ -271,8 +272,8 @@ export function ManageBarbershopServices({
                   />
                   <div>
                     <p className="font-semibold">{service.name}</p>
-                    <p className="text-sm font-bold">
-                      R$ {Number(service.price)}
+                    <p className="text-sm font-semibold">
+                      {formatCurrencyBRL(Number(service.price))}
                     </p>
                   </div>
                 </div>
