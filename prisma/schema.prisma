@@ -81,7 +81,6 @@ model Service {
   id                 String              @id @default(cuid())
   name               String              @unique
   description        String
-  price              Float
   imageUrl           String
   barbershopServices BarbershopService[]
 }

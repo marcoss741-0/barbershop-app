@@ -107,12 +107,12 @@ export function CreateBarbershopForm({
           imageUrl,
           phones: phonesArray,
         },
-        serviceDetails: data.serviceDetails.map(service => ({
-          serviceName: service.serviceName || '',
-          displayName: service.displayName || '',
-          description: service.description || '',
+        serviceDetails: data.serviceDetails.map((service) => ({
+          serviceName: service.serviceName || "",
+          displayName: service.displayName || "",
+          description: service.description || "",
           price: service.price || 0,
-          imageUrl: service.imageUrl || ''
+          imageUrl: service.imageUrl || "",
         })),
       });
 
