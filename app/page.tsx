@@ -71,11 +71,7 @@ const Home = async () => {
           <div className="mt-6">
             <SearchInput />
           </div>
-          {
-            <>
-              <FastSearch />
-            </>
-          }
+          {<FastSearch />}
           <div className="relative mt-6 flex h-40 w-full items-center rounded-md lg:h-80">
             <Image
               fill

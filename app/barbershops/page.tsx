@@ -13,10 +13,7 @@ interface BarbershopsPageProps {
   };
 }
 
-const BarbershopsPage = async ({
-  params,
-  searchParams,
-}: BarbershopsPageProps) => {
+const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
   const barbershops = await queryBarbershopServiceByName(
     searchParams.service ?? "",
     searchParams.title ?? "",

@@ -96,7 +96,7 @@ export function ManageBarbershopServices({
       case "Pezinho":
         return "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png";
       default:
-        return "https://res.cloudinary.com/dz84imb8z/image/upload/v1746272782/ChatGPT_Image_3_de_mai._de_2025_08_45_32_kg3h5l.png";
+        return "https://res.cloudinary.com/dz84imb8z/image/upload/v1746363842/37603_czvaw2.jpg";
     }
   };
 

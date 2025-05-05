@@ -1,13 +1,15 @@
+import InfoBarberPage from "@/app/_components/info-barbershop-page";
 import PhoneItem from "../../_components/phone-item";
 import ServiceItem from "../../_components/service-item";
 import SidebarSheet from "../../_components/sidebar-sheet";
 import { Button } from "../../_components/ui/button";
 import { Sheet, SheetTrigger } from "../../_components/ui/sheet";
 import { queryBarbershopById } from "../../_data/query-on-db";
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
+import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getRating } from "@/app/_actions/get-rating";
 
 interface BarbershopPageProps {
   params: {
@@ -21,6 +23,8 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
   if (!barbershop) {
     return notFound();
   }
+
+  const { average, count } = await getRating(barbershop.id);
 
   return (
     <>
@@ -59,22 +63,18 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </div>
 
         <div className="flex flex-col justify-start gap-2 border-b border-solid p-5">
-          <h1 className="mt-2 text-xl font-bold">{barbershop.name}</h1>
-
-          <div className="flex items-center gap-1">
-            <MapPinIcon className="text-primary" size={18} />
-            <p className="text-sm">{barbershop.address}</p>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <StarIcon size={18} className="fill-primary text-primary" />
-            <p className="text-sm">5,0 (889 avaliações)</p>
-          </div>
+          <InfoBarberPage
+            avg={average.toFixed(2)}
+            count={JSON.stringify(count)}
+            barbershop={barbershop}
+          />
         </div>
 
-        <div className="flex flex-col gap-3 border-b border-solid p-5">
+        <div className="flex w-full flex-col gap-3 border-b border-solid p-5">
           <h2 className="text-sm font-medium text-foreground">SOBRE NÓS</h2>
-          <p className="text-sm">{barbershop.description}</p>
+          <p className="max-h-[200px] overflow-y-auto whitespace-pre-wrap break-words text-sm">
+            {barbershop.description}
+          </p>
         </div>
 
         <div className="flex flex-col gap-3 border-b border-solid p-5">
