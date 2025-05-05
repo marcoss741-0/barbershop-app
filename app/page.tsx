@@ -182,9 +182,7 @@ const Home = async () => {
                                     locale: ptBR,
                                   })}
                                   <span className="block">
-                                    {format(book.date, "HH:mm", {
-                                      locale: ptBR,
-                                    })}
+                                    {format(book.date, "HH:mm")}
                                   </span>
                                 </p>
                               </div>
@@ -204,28 +202,33 @@ const Home = async () => {
                               {invalidBookings.map((book) => (
                                 <div
                                   key={book.id}
-                                  className="flex w-full items-center justify-between space-x-4 rounded-md border p-4"
+                                  className="flex w-full items-center justify-between space-x-2 rounded-md border p-2"
                                 >
                                   <Avatar>
                                     <AvatarImage
                                       src={book.user.image || "/perfil.png"}
                                     />
                                   </Avatar>
-                                  <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">
+                                  <div className="flex-1 space-y-1 border-r-2 p-1">
+                                    <p className="text-xs font-medium leading-none">
                                       {book.user.name}
                                     </p>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-xs text-muted-foreground">
                                       {book.barbershopService.name}
                                     </p>
                                   </div>
-                                  <div className="flex flex-col items-center justify-center text-xs font-semibold capitalize">
-                                    <p className="flex flex-col">
-                                      {format(book.date, "d MMM", {
+                                  <div className="flex flex-col items-center justify-center p-1 text-xs font-semibold capitalize">
+                                    <span className="flex flex-col">
+                                      {format(book.date, "d", {
                                         locale: ptBR,
                                       })}
-                                      <span>{format(book.date, "HH:mm")}</span>
-                                    </p>
+                                    </span>
+                                    <span className="flex flex-col">
+                                      {format(book.date, "MMM", {
+                                        locale: ptBR,
+                                      })}
+                                    </span>
+                                    <span>{format(book.date, "HH:mm")}</span>
                                   </div>
                                   <DatePicker
                                     bookingId={book.id}

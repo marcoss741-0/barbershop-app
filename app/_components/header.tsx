@@ -12,9 +12,9 @@ const Header = () => {
       <Card className="rounded-none">
         <CardContent className="flex items-center justify-between gap-2">
           <div className="flex items-center justify-between gap-2">
-            <Link href="/" className="flex gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <ScissorsIcon className="h-8 w-8 font-bold text-primary" />
-              <h1 className="text-[20px] font-semibold text-foreground">
+              <h1 className="text-[16px] font-semibold text-foreground">
                 ÔMEGA BARBER´S
               </h1>
             </Link>

@@ -131,7 +131,7 @@ export function DatePicker({ bookingId, serviceId }: DatePickerParams) {
           size="xs"
           variant={"outline"}
           className={cn(
-            "w-[200px] justify-start pl-2 text-left font-normal capitalize",
+            "w-[150px] justify-start pl-2 text-left font-normal capitalize",
             !selectedDay && "text-muted-foreground",
           )}
         >
@@ -139,7 +139,7 @@ export function DatePicker({ bookingId, serviceId }: DatePickerParams) {
           {selectedDay ? (
             format(selectedDay, "eeeeee dd MMM", { locale: ptBR })
           ) : (
-            <span className="ml-2 text-xs font-semibold">Reagendar</span>
+            <span className="ml-2 text-xs font-semibold">Remarcar</span>
           )}
         </Button>
       </PopoverTrigger>
