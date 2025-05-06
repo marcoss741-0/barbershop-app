@@ -137,24 +137,29 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
     try {
       if (!selectedDate) return;
 
-      await creatingBooking({
-        date: selectedDate,
-        barbershopServiceId: service.id,
-        barbershopId: barbershop.id,
-      });
+      const date = selectedDate.toString();
+      const barbershopId = barbershop.id;
+      const barbershopServiceId = service.id;
 
-      toast("Agendamento realizado!", {
-        description: `Agendado para o dia: ${format(
-          selectedDate,
-          "dd/MM/yyyy 'as' HH:mm",
-        )}`,
-        action: {
-          label: "Ver Agendamentos",
-          onClick: () => {
-            router.push("/bookings");
+      const response = await fetch(
+        "http://localhost:3000/api/bookings/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({ date, barbershopId, barbershopServiceId }),
         },
-      });
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || "");
+        return;
+      }
+
+      toast.success(data.message || "");
 
       handleBookingSheetIsopenChange();
     } catch (error) {

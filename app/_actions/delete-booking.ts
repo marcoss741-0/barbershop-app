@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, unstable_cache } from "next/cache";
+import { revalidatePath } from "next/cache";
 import db from "../_lib/prisma";
 
 export const deleteBooking = async (bookingId: string) => {

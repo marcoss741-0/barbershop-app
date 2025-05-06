@@ -2,33 +2,57 @@
 
 import { revalidatePath } from "next/cache";
 import db from "../_lib/prisma";
-import { auth } from "../_lib/auth-option";
 
 interface CreatingBookingParams {
+  userId: string;
   barbershopServiceId: string;
   barbershopId: string;
   date: Date;
 }
 
 const creatingBooking = async (params: CreatingBookingParams) => {
-  const user = await auth();
-
-  if (!user) {
-    throw new Error("Usuário não autenticado");
+  if (!params.userId) {
+    return { success: false, message: "Usuário não autenticado" };
   }
-  await db.booking.create({
-    data: {
-      date: params.date,
-      userId: (user.user as { id: string }).id,
-      barbershopId: params.barbershopId,
-      barbershopServiceId: params.barbershopServiceId,
+  // Busque a barbearia do agendamento
+  const barbershop = await db.barbershop.findUnique({
+    where: {
+      id: params.barbershopId,
     },
   });
-};
 
-revalidatePath("/barbershops/[id]", "page");
-revalidatePath("/barbershops");
-revalidatePath("/bookings");
-revalidatePath("/");
+  // Verifique se o usuário é dono da barbearia
+  if (barbershop?.userId === params.userId) {
+    return {
+      success: false,
+      message: "O Usuário não pode agendar em sua própria Barbearia",
+    };
+  }
+
+  try {
+    await db.booking.create({
+      data: {
+        date: params.date,
+        userId: params.userId,
+        barbershopId: params.barbershopId,
+        barbershopServiceId: params.barbershopServiceId,
+      },
+    });
+
+    // Revalide os paths após criar o agendamento
+    revalidatePath("/barbershops/[id]", "page");
+    revalidatePath("/barbershops");
+    revalidatePath("/bookings");
+    revalidatePath("/");
+
+    return { success: true, message: "Agendamento criado com sucesso" };
+  } catch (error: any) {
+    // Trate o erro e retorne uma mensagem amigável
+    return {
+      success: false,
+      message: error.message || "Erro ao criar agendamento",
+    };
+  }
+};
 
 export default creatingBooking;

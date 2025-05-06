@@ -58,7 +58,6 @@ const RegisterForm2 = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (data: FormData) => {
-    // console.log(data);
     const { name, email, password, file } = data;
     const formData = new FormData();
     formData.append("name", name);
