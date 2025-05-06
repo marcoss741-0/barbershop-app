@@ -1,5 +1,6 @@
 import db from "../_lib/prisma";
 import { auth } from "../_lib/auth-option";
+import { revalidatePath } from "next/cache";
 
 export const queryBookings = async () => {
   const session = await auth();
@@ -30,12 +31,36 @@ export const queryBookings = async () => {
 };
 
 export const queryMostPopularBarber = async () => {
-  return await db.barbershop.findMany({
-    take: 5,
-    orderBy: {
-      name: "desc",
+  const popularBarbershops = await db.rating.groupBy({
+    by: ["barbershopId"],
+    _avg: {
+      rating: true,
     },
+    orderBy: {
+      _avg: {
+        rating: "desc",
+      },
+    },
+    take: 5,
   });
+
+  const barbershopsWithRatings = await Promise.all(
+    popularBarbershops.map(async (shop) => {
+      const barbershop = await db.barbershop.findUnique({
+        where: {
+          id: shop.barbershopId,
+        },
+      });
+      return {
+        ...barbershop,
+        averageRating: shop._avg.rating,
+      };
+    }),
+  );
+  revalidatePath("/");
+  revalidatePath("/barbershops");
+
+  return barbershopsWithRatings;
 };
 
 export const queryBarbershops = async () => {

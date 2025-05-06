@@ -1,6 +1,5 @@
 "use server";
 
-import { error } from "console";
 import db from "../_lib/prisma";
 import { auth } from "@/app/_lib/auth-option";
 import { revalidatePath } from "next/cache";
@@ -39,6 +38,7 @@ export async function setRating(barbershopId: string, rating: number) {
     }
 
     revalidatePath("/");
+    revalidatePath("/barbershops");
     revalidatePath(`/barbershops/${evaluateBarbershop.id}`);
 
     return { success: false, error: "Erro ao avaliar a barbearia" };

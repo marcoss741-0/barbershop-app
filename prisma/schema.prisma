@@ -77,6 +77,7 @@ model Barbershop {
   userId      String?             @unique
   user        User?               @relation(fields: [userId], references: [id])
   Booking     Booking[]
+  Rating      Rating[]
 }
 
 model Service {
@@ -112,12 +113,13 @@ model Booking {
 }
 
 model Rating {
-  id           String   @id @default(uuid())
-  user         User     @relation(fields: [userId], references: [id])
+  id           String     @id @default(uuid())
+  user         User       @relation(fields: [userId], references: [id])
   userId       String
-  barbershopId String // Pode ser um ID genérico de um produto, serviço etc.
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  barbershopId String
   rating       Int
-  createdAt    DateTime @default(now())
+  createdAt    DateTime   @default(now())
 
   @@index([barbershopId])
 }
