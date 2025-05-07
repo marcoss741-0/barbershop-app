@@ -141,16 +141,13 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
       const barbershopId = barbershop.id;
       const barbershopServiceId = service.id;
 
-      const response = await fetch(
-        "http://localhost:3000/api/bookings/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ date, barbershopId, barbershopServiceId }),
+      const response = await fetch("/api/bookings/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ date, barbershopId, barbershopServiceId }),
+      });
 
       const data = await response.json();
 
