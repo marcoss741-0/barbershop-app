@@ -64,7 +64,13 @@ export const queryMostPopularBarber = async () => {
 };
 
 export const queryBarbershops = async () => {
-  return await db.barbershop.findMany({});
+  const barbershops = await db.barbershop.findMany({});
+
+  if (barbershops.length > 0) {
+    return barbershops;
+  }
+
+  return { success: false, message: "Nenhuma barbearia cadastrada!" };
 };
 
 export const queryBarbershopById = async (id: string) => {

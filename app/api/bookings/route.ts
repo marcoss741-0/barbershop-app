@@ -1,4 +1,5 @@
 import { updateBooking } from "@/app/_actions/update-booking";
+import { queryBookings } from "@/app/_data/query-on-db";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -21,5 +22,25 @@ export async function POST(req: Request) {
       { error: error.message || "Erro ao criar usuário." },
       { status: 400 },
     );
+  }
+}
+
+export async function GET(request) {
+  try {
+    const response = await queryBookings();
+    if (!response) {
+      return NextResponse.json({
+        successs: false,
+        message: "A consulta não retornou nada!",
+      });
+    }
+    return NextResponse.json(response);
+  } catch (error) {
+    console.log(error);
+
+    return NextResponse.json({
+      success: false,
+      message: "Oops, um erro ineseperado aconteceu!",
+    });
   }
 }

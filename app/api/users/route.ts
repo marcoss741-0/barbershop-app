@@ -1,6 +1,8 @@
 import { createUser } from "../../users/_actions/creating-user";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { queryBarbershopByUser } from "@/app/_data/query-on-db";
+import { auth } from "@/app/_lib/auth-option";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,

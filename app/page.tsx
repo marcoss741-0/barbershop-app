@@ -1,16 +1,12 @@
 import Header from "./_components/header";
 import Image from "next/image";
-import BarbershopItem from "./_components/barbershop-item";
-import BookingItem from "./_components/booking-item";
 import SearchInput from "./_components/search";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   countBookingsByUserBarbershops,
   queryBarbershopByUser,
-  queryBarbershops,
   queryBookings,
-  queryMostPopularBarber,
   userHasBarbershop,
 } from "./_data/query-on-db";
 import FastSearch from "./_components/fast-search-buttons";
@@ -33,14 +29,13 @@ import { DatePicker } from "./_components/update-date-booking";
 import { Popover, PopoverContent } from "./_components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import Link from "next/link";
-import { Alert, AlertDescription, AlertTitle } from "./_components/ui/alert";
+import BarbershopsContainer from "./_components/barbershops-container";
+import BookingsContainer from "./_components/booking-container";
+import BookingOnLogin from "./_components/booking-on-login";
 
 const Home = async () => {
   const session = await auth();
 
-  const babershops = await queryBarbershops();
-  const popularBarbershop = await queryMostPopularBarber();
-  const bookings = await queryBookings();
   const userData = (await queryBarbershopByUser(session?.user?.id)) ?? [];
   const countBookingByBarbershopUser = await countBookingsByUserBarbershops(
     session?.user?.id,
@@ -251,83 +246,21 @@ const Home = async () => {
           </>
         )}
 
-        {session?.user && babershops.length > 0 ? (
+        {session?.user ? (
           <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-foreground">
-              AGENDAMENTOS
-            </h3>
-            <div className="flex min-w-full gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-              {bookings.length > 0 ? (
-                bookings.map((booking) => (
-                  <BookingItem
-                    key={booking.id}
-                    booking={{
-                      id: booking.id,
-                      userId: booking.userId,
-                      date: booking.date,
-                      barbershopId: booking.barbershopId,
-                      barbershopServiceId: booking.barbershopServiceId,
-                      barbershop: booking.barbershop,
-                      barbershopService: booking.barbershopService,
-                    }}
-                  />
-                ))
-              ) : (
-                <div className="flex w-full items-center justify-center">
-                  <p className="text-sm font-medium text-secondary-foreground">
-                    Você não tem agendamentos
-                  </p>
-                </div>
-              )}
-            </div>
+            {/* Agendamento do usuario logado */}
+            <BookingsContainer />
           </div>
         ) : (
-          <></>
+          <Card>
+            {/* Opçao para login caso não logado */}
+            <BookingOnLogin />
+          </Card>
         )}
-
-        {babershops && babershops.length > 0 ? (
-          <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-foreground">
-              RECOMENDADOS
-            </h3>
-
-            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-              {babershops.map((babershop) => (
-                <BarbershopItem key={babershop.id} barbershop={babershop} />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-
-        {popularBarbershop && popularBarbershop.length > 0 ? (
-          <div className="mt-4 w-full items-center gap-2 space-y-4">
-            <h3 className="text-[16px] font-semibold text-foreground">
-              POPULARES
-            </h3>
-
-            <div className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-              {popularBarbershop.map((pop) => (
-                <BarbershopItem key={pop.id} barbershop={pop} />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-center justify-center rounded-md p-4">
-              <Alert>
-                <Terminal className="h-4 w-4" />
-                <AlertTitle>Ooops, Galera!</AlertTitle>
-                <AlertDescription>
-                  A Plataforma esta em{" "}
-                  <span className="font-semibold text-primary">Beta</span> e
-                  ainda não temos associados, logo, logo estará tudo pronto!!
-                </AlertDescription>
-              </Alert>
-            </div>
-          </>
-        )}
+        <>
+          {/* Barbearia disponiveis na plataforma */}
+          <BarbershopsContainer />
+        </>
       </div>
     </div>
   );
