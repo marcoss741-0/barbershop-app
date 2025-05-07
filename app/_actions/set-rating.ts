@@ -9,21 +9,44 @@ export async function setRating(barbershopId: string, rating: number) {
 
   try {
     if (!userId) {
-      return { success: false, error: "Usuário não autenticado" };
+      return { success: false, message: "Usuário não autenticado" };
+    }
+
+    const barbershop = await db.barbershop.findUnique({
+      where: {
+        id: barbershopId,
+      },
+    });
+
+    if (!barbershop) {
+      return {
+        success: false,
+        message: "Barbearia não encontrada",
+      };
+    }
+
+    if (barbershop.userId === userId) {
+      return {
+        success: false,
+        message: "O usuário não pode avaliar sua própria barbearia",
+      };
     }
 
     // const userHasRating = await db.rating.findFirst({
     //   where: {
     //     userId,
+    //     barbershopId,
     //   },
     // });
 
-    // const hasRating = !!userHasRating;
-    // if (hasRating == true) {
-    //   return { success: false, message: "Usuário Já Avaliou esta Barbearia" };
+    // if (userHasRating) {
+    //   return {
+    //     success: false,
+    //     message: "Usuário já avaliou esta barbearia",
+    //   };
     // }
 
-    const evaluateBarbershop = await db.rating.create({
+    await db.rating.create({
       data: {
         barbershopId,
         userId,
@@ -31,17 +54,11 @@ export async function setRating(barbershopId: string, rating: number) {
       },
     });
 
-    const statusRating = !!evaluateBarbershop;
-
-    if (statusRating == true) {
-      return { success: true, message: "Avaliação confirmada!" };
-    }
-
     revalidatePath("/");
     revalidatePath("/barbershops");
-    revalidatePath(`/barbershops/${evaluateBarbershop.id}`);
+    revalidatePath(`/barbershops/${barbershopId}`);
 
-    return { success: false, error: "Erro ao avaliar a barbearia" };
+    return { success: true, message: "Avaliação confirmada!" };
   } catch (error) {
     return { success: false, error: "Erro inesperado!" };
   }

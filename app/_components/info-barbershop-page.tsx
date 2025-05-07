@@ -18,7 +18,7 @@ const InfoBarberPage = ({ barbershop, avg, count }: InfoBarberPageParams) => {
       const result = await setRating(barbershop.id, value);
 
       if (result.success == false) {
-        toast.success(result.message);
+        toast.error(result.message);
       }
 
       toast.success(result.message);
