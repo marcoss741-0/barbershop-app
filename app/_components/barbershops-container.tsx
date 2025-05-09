@@ -47,8 +47,10 @@ const BarbershopsContainer = () => {
       }
     }
 
-    fetchBarbershops();
-    fetchPopBarbershops();
+    setTimeout(() => {
+      fetchBarbershops();
+      fetchPopBarbershops();
+    }, 4000);
   }, []);
 
   return (

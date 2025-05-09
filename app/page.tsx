@@ -6,7 +6,6 @@ import { ptBR } from "date-fns/locale";
 import {
   countBookingsByUserBarbershops,
   queryBarbershopByUser,
-  queryBookings,
   userHasBarbershop,
 } from "./_data/query-on-db";
 import FastSearch from "./_components/fast-search-buttons";
@@ -32,6 +31,7 @@ import Link from "next/link";
 import BarbershopsContainer from "./_components/barbershops-container";
 import BookingsContainer from "./_components/booking-container";
 import BookingOnLogin from "./_components/booking-on-login";
+import { signIn } from "next-auth/react";
 
 const Home = async () => {
   const session = await auth();

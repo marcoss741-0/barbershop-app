@@ -16,14 +16,6 @@ import { toast } from "sonner";
 import { useTransition, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "../_lib/auth-client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
 
 export const SidebarInteractiveElements = ({ user }: { user: any }) => {
   const [mounted, setMounted] = useState(false);
