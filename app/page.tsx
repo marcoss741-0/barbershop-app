@@ -32,6 +32,7 @@ import BarbershopsContainer from "./_components/barbershops-container";
 import BookingsContainer from "./_components/booking-container";
 import BookingOnLogin from "./_components/booking-on-login";
 import ResumeBookings from "./_components/resume-bookings";
+import { NotificationCenter } from "./_components/notification-center";
 
 const Home = async () => {
   const session = await auth();
@@ -231,9 +232,7 @@ const Home = async () => {
                       </div>
                     </CardContent>
                     <CardFooter>
-                      <Button className="w-full">
-                        <Check /> Receber Notificação de todas
-                      </Button>
+                      <NotificationCenter />
                     </CardFooter>
                   </Card>
                 </>

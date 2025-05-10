@@ -156,8 +156,18 @@ const ServiceItem = ({ service, barbershop }: BarbershopServicesProps) => {
         return;
       }
 
+      await fetch("/api/notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          description: `Reserva para ${"testes de implementação"}`,
+          userId: "reservationData.userId",
+          // outros dados relevantes
+        }),
+      });
       toast.success(data.message || "");
-
       handleBookingSheetIsopenChange();
     } catch (error) {
       console.log(error);
