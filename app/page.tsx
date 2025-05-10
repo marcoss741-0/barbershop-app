@@ -31,7 +31,7 @@ import Link from "next/link";
 import BarbershopsContainer from "./_components/barbershops-container";
 import BookingsContainer from "./_components/booking-container";
 import BookingOnLogin from "./_components/booking-on-login";
-import { signIn } from "next-auth/react";
+import ResumeBookings from "./_components/resume-bookings";
 
 const Home = async () => {
   const session = await auth();
@@ -142,15 +142,11 @@ const Home = async () => {
                         </Popover>
                       </CardTitle>
                       <CardDescription className="text-[16px] text-foreground">
-                        A sua{" "}
-                        <span className="font-bold text-primary">
-                          {hasBarbershops.name}
-                        </span>{" "}
-                        possui{" "}
-                        <span className="font-bold">
-                          {countBookingByBarbershopUser}
-                        </span>{" "}
-                        agendamentos.
+                        <ResumeBookings
+                          name={hasBarbershops.name}
+                          quantity={countBookingByBarbershopUser}
+                          barbershopId={hasBarbershops.id}
+                        />
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex max-h-[250px] flex-col gap-4 overflow-y-auto [&::-webkit-scrollbar]:hidden">

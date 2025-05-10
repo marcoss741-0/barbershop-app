@@ -15,7 +15,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/app/_components/ui/alert";
-import { ArrowLeftCircleIcon, MoveLeft, Terminal } from "lucide-react";
+import { ArrowLeftCircleIcon, Terminal } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 
