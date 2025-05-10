@@ -1,5 +1,4 @@
 "use client";
-import { useRealtimeBookings } from "../hooks/use-realtime-bookings";
 
 interface ResumeBookingsParams {
   name: string;
@@ -12,7 +11,6 @@ const ResumeBookings = ({
   quantity,
   barbershopId,
 }: ResumeBookingsParams) => {
-  useRealtimeBookings(barbershopId);
   return (
     <div>
       A <span className="font-bold text-primary">{name}</span> possui{" "}
